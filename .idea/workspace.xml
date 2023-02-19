@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Library system in Objected Oriented Programming.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/classes/Book.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/classes/Publication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/user/User.java" afterDir="false" />
+    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Added basic classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Publication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Publication.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +36,9 @@
         <option name="workspaceImportEnabled" value="true" />
       </MavenImportingSettings>
     </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2Lxfx15zUA3RXhAahaYikn0XXJT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -102,12 +105,20 @@
       <option name="project" value="LOCAL" />
       <updated>1676818168525</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added basic classes">
+      <created>1676819906172</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1676819906172</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Library system in Objected Oriented Programming." />
-    <option name="LAST_COMMIT_MESSAGE" value="Library system in Objected Oriented Programming." />
+    <MESSAGE value="Added basic classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added basic classes" />
   </component>
 </project>
