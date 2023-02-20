@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Done simple ID distribution between objects.">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Finished UserID, added renting items by user">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Book.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/classes/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/user/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Publication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Publication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +40,7 @@
     </option>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectId" id="2Lxfx15zUA3RXhAahaYikn0XXJT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -58,11 +60,11 @@
 }</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="classes.Main" />
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
       <module name="OOP-Library" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="classes.*" />
+          <option name="PATTERN" value="main.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -120,7 +122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676839472781</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Finished UserID, added renting items by user">
+      <created>1676893744589</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1676893744589</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -128,6 +137,7 @@
     <MESSAGE value="Library system in Objected Oriented Programming." />
     <MESSAGE value="Added basic classes" />
     <MESSAGE value="Done simple ID distribution between objects." />
-    <option name="LAST_COMMIT_MESSAGE" value="Done simple ID distribution between objects." />
+    <MESSAGE value="Finished UserID, added renting items by user" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished UserID, added renting items by user" />
   </component>
 </project>

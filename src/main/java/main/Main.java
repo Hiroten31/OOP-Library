@@ -1,4 +1,6 @@
-package classes;
+package main;
+
+import classes.*;
 
 import java.time.LocalDate;
 
@@ -19,6 +21,9 @@ public class Main {
         User user1 = new User("Banan", "Paulina", LocalDate.of(2005, 5, 6));
         System.out.println("user1.getUserID(): " + user1.getUserID());
         wyborcza.rentItem(user1);
+        szaszki.rentItem(user1);
+        System.out.println(user1.getFullName()+ " wypozyczone: " + user1.getRentedItems());
+        wyborcza.returnItem(user1);
         System.out.println(user1.getFullName()+ " wypozyczone: " + user1.getRentedItems());
         System.out.println("Item count: " + Item.getCount());
     }

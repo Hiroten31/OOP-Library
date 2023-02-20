@@ -2,19 +2,27 @@ package classes;
 
 public abstract class Item {
     private static int count;
-    int id, amountAvailable, amountRented;
+    public int id, amountAvailable, amountRented;
     String name, rentedByUserID;
+    //usun public pozniej!!
     public static int getCount() {
         return count;
     }
     Item() {
         ++count;
     }
-    void rentItem(User user){
+    public void rentItem(User user){
         amountAvailable--;
         amountRented++;
         this.rentedByUserID = user.getUserID();
         user.rentsItem(this.id);
+    }
+
+    public void returnItem(User user){
+        amountAvailable++;
+        amountRented--;
+        this.rentedByUserID = null;
+        user.returnsItem(this.id);
     }
 
     /*

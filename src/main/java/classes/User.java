@@ -9,13 +9,13 @@ public class User {
     private final LocalDate joinDate;
     private Integer phoneNumber;
     private List<Integer> ItemsRented = new ArrayList<>();
-    User(String name, String surname, LocalDate joinDate){
+    public User(String name, String surname, LocalDate joinDate){
         this.name = name;
         this.surname = surname;
         this.joinDate = joinDate;
         userID = "" + name.charAt(0) + surname.charAt(0) + joinDate.getYear() + joinDate.getMonth() + joinDate.getDayOfMonth();
     }
-    User(String name, String surname, LocalDate joinDate, Integer phoneNumber){
+    public User(String name, String surname, LocalDate joinDate, Integer phoneNumber){
         this.name = name;
         this.surname = surname;
         this.joinDate = joinDate;
@@ -31,7 +31,7 @@ public class User {
     public void rentsItem(int id){
         ItemsRented.add(id);
     }
-    public void returnsItem(int id){
+    public void returnsItem(Integer id){
         ItemsRented.remove(id);
     }
     public String getFullName(){
