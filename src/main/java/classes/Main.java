@@ -16,6 +16,10 @@ public class Main {
         System.out.println("szaszy.id: " + szaszy.id);
         System.out.println("wyborcza.id: " + wyborcza.id);
         System.out.println("naukowa.id: " + naukowa.id);
+        User user1 = new User("Banan", "Paulina", LocalDate.of(2005, 5, 6));
+        System.out.println("user1.getUserID(): " + user1.getUserID());
+        wyborcza.rentItem(user1);
+        System.out.println(user1.getFullName()+ " wypozyczone: " + user1.getRentedItems());
         System.out.println("Item count: " + Item.getCount());
     }
 }
