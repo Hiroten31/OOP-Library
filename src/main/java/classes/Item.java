@@ -1,6 +1,5 @@
 package classes;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ public abstract class Item {
     int id, amountAvailable, amountRented;
     String name;
     List<String> rentedByUsersID = new ArrayList<>();
-    private static List<Item> Items = new ArrayList<>();
+    static List<Item> Items = new ArrayList<>();
     static int getCount() {
         return count;
     }
@@ -21,13 +20,13 @@ public abstract class Item {
         amountAvailable--;
         amountRented++;
         rentedByUsersID.add(user.getUserID());
-        user.rentsItem(this.id);
+        user.rentsItem(this);
     }
     public void returnItem(User user){
         amountAvailable++;
         amountRented--;
         rentedByUsersID.remove(user.getUserID());
-        user.returnsItem(this.id);
+        user.returnsItem(this);
     }
     public static List<Item> getItemList(){
         return Items;

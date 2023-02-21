@@ -16,7 +16,7 @@ public class Main {
         Newspaper newspaper1 = new Newspaper("Daily Mail", "New York Daily News", LocalDate.of(1992, Month.FEBRUARY, 20), 30, 0);
         Newspaper newspaper2 = new Newspaper("Old World News", "Universality", LocalDate.of(1977, Month.APRIL, 27));
         User user1 = new User("Banan", "Paulina", LocalDate.of(2020, Month.FEBRUARY, 14), 608843929);
-        User user2 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 28), 123456789);
+        User user2 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 28), 987654321);
         book2.rentItem(user1);
         newspaper1.rentItem(user1);
         book2.rentItem(user2);

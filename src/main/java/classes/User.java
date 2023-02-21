@@ -1,16 +1,17 @@
 package classes;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private String name, surname, userID;
     private final LocalDate joinDate;
-    private static List<LocalDate> dateOfRenting = new ArrayList<>();
+    private List<LocalDate> dateOfRenting = new ArrayList<>();
     private Integer phoneNumber;
-    private List<Integer> ItemsRented = new ArrayList<>();
-    private static List<User> Users = new ArrayList<>();
+    private List<Item> ItemsRented = new ArrayList<>();
+    static List<User> Users = new ArrayList<>();
     public User(String name, String surname, LocalDate joinDate){
         this.name = name;
         this.surname = surname;
@@ -21,7 +22,9 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.joinDate = joinDate;
+        this.phoneNumber = phoneNumber;
         userID = phoneNumber.toString();
+        Users.add(this);
     }
     public void setPhoneNumber(Integer phoneNumber){
         this.phoneNumber = phoneNumber;
@@ -30,21 +33,32 @@ public class User {
     public String getUserID() {
         return userID;
     }
-    public void rentsItem(int id){
-        ItemsRented.add(id);
-        dateOfRenting.add(LocalDate.now());
+    public void rentsItem(Item item){
+        ItemsRented.add(item);
+        dateOfRenting.add(LocalDate.of(2023, Month.MARCH, ((phoneNumber%10)*item.getId())%28));
     }
-    public void returnsItem(Integer id){
-        dateOfRenting.remove(ItemsRented.indexOf(id));
-        ItemsRented.remove(id);
+    public void returnsItem(Item item){
+        dateOfRenting.remove(ItemsRented.indexOf(item));
+        ItemsRented.remove(item);
     }
     public String getFullName(){
         return name+" "+surname;
     }
-    public List<Integer> getRentedItems(){
+    public List<Item> getRentedItems(){
         return ItemsRented;
     }
-    /*public static LocalDate findDateOfRenting(int itemIndex){
-        return dateOfRenting.get(itemIndex);
-    }*/
+    public static User getUserById(String memberID){
+        for (User user:Users) {
+            if(user.getUserID().equals(memberID)){
+                return user;
+            }
+        }
+        return null;
+    }
+    public static List<User> getUserList(){
+        return Users;
+    }
+    public List<LocalDate> getDateOfRenting(){
+        return dateOfRenting;
+    }
 }

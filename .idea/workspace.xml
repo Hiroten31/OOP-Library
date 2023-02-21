@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Reorganized classes in separate packages for better accessibility control.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/main/Menu.java" afterDir="false" />
+    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Book.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/classes/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/classes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676904310559</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting.">
+      <created>1676936404010</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1676936404010</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -144,7 +150,8 @@
     <MESSAGE value="Done simple ID distribution between objects." />
     <MESSAGE value="Finished UserID, added renting items by user" />
     <MESSAGE value="Reorganized classes in separate packages for better accessibility control." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reorganized classes in separate packages for better accessibility control." />
+    <MESSAGE value="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -152,6 +159,10 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="7" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="10" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

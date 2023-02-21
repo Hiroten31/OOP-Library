@@ -3,7 +3,6 @@ package main;
 import classes.Item;
 import classes.User;
 
-import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Menu {
@@ -90,12 +89,12 @@ public class Menu {
         else if(option.charAt(0) == '3'){
             System.out.println("\n\n> Search for item by member ID <\nMember ID: ");
             String memberID = scanner.nextLine();
-            System.out.printf("%5s %-150s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "ID");
-            for (Item item:Item.getItemList()) {
-                if(item.getRentedByUserID().contains(memberID)) {
-                    /*System.out.printf("%5s %-150s %10s %5s\n", item.getId(), item.getName(), User.findDateOfRenting(Item.getItemList().indexOf(item)), item.getId());*/
-                    System.out.printf("%5s %-150s %10s %5s\n", item.getId(), item.getName(), LocalDate.now(), item.getId());
-                }
+            System.out.printf("%5s %-150s %15s %5s\n", "ID", "NAME", "DATE OF RENTING", "ID");
+            for (User user:User.getUserList()) {
+                if(user.getUserID().equals(memberID))
+                    for(int i=0; i<user.getRentedItems().size(); i++) {
+                        System.out.printf("%5s %-150s %15s %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getRentedItems().get(i).getId());
+                    }
             }
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
