@@ -35,7 +35,7 @@ public class User {
     }
     public void rentsItem(Item item){
         ItemsRented.add(item);
-        dateOfRenting.add(LocalDate.of(2023, Month.MARCH, ((phoneNumber%10)*item.getId())%28));
+        dateOfRenting.add(LocalDate.of(2022, Month.OCTOBER, ((phoneNumber%10)*item.getId())%28));
     }
     public void returnsItem(Item item){
         dateOfRenting.remove(ItemsRented.indexOf(item));
@@ -55,6 +55,15 @@ public class User {
         }
         return null;
     }
+
+    public LocalDate getJoinDate() {
+        return joinDate;
+    }
+
+    public Integer getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public static List<User> getUserList(){
         return Users;
     }

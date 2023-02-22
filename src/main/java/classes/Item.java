@@ -7,7 +7,7 @@ public abstract class Item {
     private static int count;
     int id, amountAvailable, amountRented;
     String name;
-    List<String> rentedByUsersID = new ArrayList<>();
+    List<User> rentedByUsersID = new ArrayList<>();
     static List<Item> Items = new ArrayList<>();
     static int getCount() {
         return count;
@@ -19,13 +19,13 @@ public abstract class Item {
     public void rentItem(User user){
         amountAvailable--;
         amountRented++;
-        rentedByUsersID.add(user.getUserID());
+        rentedByUsersID.add(user);
         user.rentsItem(this);
     }
     public void returnItem(User user){
         amountAvailable++;
         amountRented--;
-        rentedByUsersID.remove(user.getUserID());
+        rentedByUsersID.remove(user);
         user.returnsItem(this);
     }
     public static List<Item> getItemList(){
@@ -43,7 +43,7 @@ public abstract class Item {
     public int getAmountRented(){
         return amountRented;
     }
-    public List<String> getRentedByUserID(){
+    public List<User> getRentedByUserID(){
         return rentedByUsersID;
     }
 

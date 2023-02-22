@@ -17,6 +17,9 @@ public class Main {
         Newspaper newspaper2 = new Newspaper("Old World News", "Universality", LocalDate.of(1977, Month.APRIL, 27));
         User user1 = new User("Banan", "Paulina", LocalDate.of(2020, Month.FEBRUARY, 14), 608843929);
         User user2 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 28), 987654321);
+        User user3 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 3), 345678912);
+        User user4 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 3), 345678912);
+        User user5 = new User("Banan", "Mikolaj", LocalDate.of(2021, Month.FEBRUARY, 22), 345678912);
         book2.rentItem(user1);
         newspaper1.rentItem(user1);
         book2.rentItem(user2);
@@ -24,6 +27,12 @@ public class Main {
         book1.rentItem(user2);
         book2.returnItem(user1);
         book4.rentItem(user1);
+        book4.rentItem(user2);
+        publication1.rentItem(user5);
+        publication2.rentItem(user5);
+        System.out.println("user5, publication2 date: " + user5.getDateOfRenting().get(1).plusMonths(3));
+        System.out.println("user5, publication2 date Months late: " + (-1)*LocalDate.now().until(user5.getDateOfRenting().get(1).plusMonths(3)).getMonths());
+        System.out.println("user5, publication2 date Days late: " + (-1)*LocalDate.now().until(user5.getDateOfRenting().get(1).plusMonths(4)).getDays());
         Menu.start();
     }
 }

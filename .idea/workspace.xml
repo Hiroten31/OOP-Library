@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting.">
+    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Done searching by memberID with correct display of personal renting date of specific item.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/classes/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/classes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/User.java" afterDir="false" />
@@ -140,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676936404010</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Done searching by memberID with correct display of personal renting date of specific item.">
+      <created>1677010826657</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1677010826657</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -151,7 +158,8 @@
     <MESSAGE value="Finished UserID, added renting items by user" />
     <MESSAGE value="Reorganized classes in separate packages for better accessibility control." />
     <MESSAGE value="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added few getters, shifted some variables into lists of Objects. Added Menu class with basic mobility options. //WIP on date of renting." />
+    <MESSAGE value="Done searching by memberID with correct display of personal renting date of specific item." />
+    <option name="LAST_COMMIT_MESSAGE" value="Done searching by memberID with correct display of personal renting date of specific item." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
