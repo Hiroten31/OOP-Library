@@ -3,7 +3,10 @@ package main;
 import classes.Item;
 import classes.User;
 
+import java.time.LocalDate;
 import java.util.Scanner;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Menu {
     static Scanner scanner = new Scanner(System.in);
@@ -18,9 +21,8 @@ public class Menu {
             Returning();
         else if(option.charAt(0) == '4')
             Register();
-        else if(option.charAt(0) == '0'){
+        else if(option.charAt(0) == '0')
             Exit();
-        }
         else {
             System.out.println("You had chose option out of possible outcomes. Try again!\n\n");
             start();
@@ -101,11 +103,13 @@ public class Menu {
         else if(option.charAt(0) == '3'){
             System.out.println("\n\n> Search for items by member ID <\nMember ID: ");
             String memberID = scanner.nextLine();
-            System.out.printf("%5s %-150s %15s %5s\n", "ID", "NAME", "DATE OF RENTING", "ID");
+            System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
             for (User user:User.getUserList()) {
                 if(user.getUserID().equals(memberID)){
-                    for(int i=0; i<user.getRentedItems().size(); i++)
-                        System.out.printf("%5s %-150s %15s %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getRentedItems().get(i).getId());
+                    for(int i=0; i<user.getRentedItems().size(); i++){
+                        long daysBetween = DAYS.between(user.getDateOfRenting().get(i).plusMonths(3), LocalDate.now());
+                        System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfRenting().get(i).plusMonths(3), daysBetween*0.57, user.getRentedItems().get(i).getId());
+                    }
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -126,7 +130,7 @@ public class Menu {
             System.out.println("\n\n> Browse through items by type <\nType: ");
             String type = scanner.nextLine();
             System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
-            for (Item item : Item.getItemList()) {
+            for (Item item:Item.getItemList()) {
                 if (item.getClass().getSimpleName().equals(type))
                     System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
             }
@@ -188,13 +192,7 @@ public class Menu {
             for (User user:User.getUserList()) {
                 if(user.getUserID().equals(memberID)) {
                     System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    if(user.getRentedItems().size()>0) {
-                        System.out.println("Books rented:");
-                        System.out.printf("%10s %-150s %15s %10s\n", "ID", "NAME", "DATE OF RENTING", "ID");
-                        for (int i = 0; i < user.getRentedItems().size(); i++)
-                            System.out.printf("%10s %-150s %15s %10s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getRentedItems().get(i).getId());
-                        System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-                    }
+                    printItemsRented(user);
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -208,13 +206,7 @@ public class Menu {
             for (User user:User.getUserList()) {
                 if(user.getFullName().equals(fullName)) {
                     System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    if(user.getRentedItems().size()>0) {
-                        System.out.println("Books rented:");
-                        System.out.printf("%10s %-150s %15s %10s\n", "ID", "NAME", "DATE OF RENTING", "ID");
-                        for (int i = 0; i < user.getRentedItems().size(); i++)
-                            System.out.printf("%10s %-150s %15s %10s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getRentedItems().get(i).getId());
-                        System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-                    }
+                    printItemsRented(user);
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -228,13 +220,7 @@ public class Menu {
             for (User user:User.getUserList()) {
                 if(user.getPhoneNumber().toString().equals(phoneNumber)){
                     System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    if(user.getRentedItems().size()>0) {
-                        System.out.println("Books rented:");
-                        System.out.printf("%10s %-150s %15s %10s\n", "ID", "NAME", "DATE OF RENTING", "ID");
-                        for (int i = 0; i < user.getRentedItems().size(); i++)
-                            System.out.printf("%10s %-150s %15s %10s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getRentedItems().get(i).getId());
-                        System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-                    }
+                    printItemsRented(user);
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -255,6 +241,17 @@ public class Menu {
         else {
             System.out.println("You had chose option out of possible outcomes. Try again!\n");
             SearchForMember();
+        }
+    }
+    private static void printItemsRented(User user){
+        if(user.getRentedItems().size()>0) {
+            System.out.println("Items rented:");
+            System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
+            for (int i = 0; i < user.getRentedItems().size(); i++) {
+                long daysBetween = DAYS.between(user.getDateOfRenting().get(i).plusMonths(3), LocalDate.now());
+                System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfRenting().get(i).plusMonths(3), daysBetween*0.57, user.getRentedItems().get(i).getId());
+            }
+            System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
         }
     }
     static void ManageItems(){

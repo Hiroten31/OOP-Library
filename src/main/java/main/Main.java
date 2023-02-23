@@ -30,9 +30,6 @@ public class Main {
         book4.rentItem(user2);
         publication1.rentItem(user5);
         publication2.rentItem(user5);
-        System.out.println("user5, publication2 date: " + user5.getDateOfRenting().get(1).plusMonths(3));
-        System.out.println("user5, publication2 date Months late: " + (-1)*LocalDate.now().until(user5.getDateOfRenting().get(1).plusMonths(3)).getMonths());
-        System.out.println("user5, publication2 date Days late: " + (-1)*LocalDate.now().until(user5.getDateOfRenting().get(1).plusMonths(4)).getDays());
         Menu.start();
     }
 }
