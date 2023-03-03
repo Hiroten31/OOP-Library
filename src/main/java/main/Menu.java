@@ -1,17 +1,14 @@
 package main;
 
-import classes.Item;
-import classes.User;
+import classes.*;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 public class Menu {
     static Scanner scanner = new Scanner(System.in);
-    static void start(){
-        System.out.println("> Library system <\n1. Database\n2. Renting\n3. Returning\n4. Register new member\n\n0. Exit");
+    static void Start(){
+        System.out.println("\n\n> Library system <\n1. Database\n2. Renting\n3. Returning\n4. Register new member\n\n0. Exit");
         String option = scanner.nextLine();
         if(option.charAt(0) == '1')
             Database();
@@ -21,18 +18,95 @@ public class Menu {
             Returning();
         else if(option.charAt(0) == '4')
             Register();
-        else if(option.charAt(0) == '0')
-            Exit();
+        else //noinspection StatementWithEmptyBody
+            if(option.charAt(0) == '0'){}
         else {
             System.out.println("You had chose option out of possible outcomes. Try again!\n\n");
-            start();
+            Start();
         }
     }
-    static int Exit(){
-        return 0;
+    static void Renting(){
+        System.out.println("\n\n> Renting an item <\nItem ID: ");
+        int itemID = scanner.nextInt();
+        scanner.nextLine();
+        for(Item item: Item.getItemList()){
+            if(item.getId() == itemID){
+                System.out.println("Member ID: ");
+                String memberID = scanner.nextLine();
+                for(User user: User.getUserList()){
+                    if(user.getUserID().equals(memberID)){
+                        System.out.println("User " + user.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
+                        item.rentItem(user);
+                    }
+                }
+            }
+        }
+        System.out.println("\n\nClick anything to return...");
+        scanner.nextLine();
+        Start();
+    }
+    static void Returning(){
+        System.out.println("\n\n> Returning an item <\nItem ID: ");
+        int itemID = scanner.nextInt();
+        scanner.nextLine();
+        for(Item item: Item.getItemList()){
+            if(item.getId() == itemID){
+                System.out.println("Member ID: ");
+                String memberID = scanner.nextLine();
+                for(User user: User.getUserList()){
+                    if(user.getUserID().equals(memberID)){
+                        if(item.getRentedByUserID().contains(user)){
+                            System.out.println("User " + user.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
+                            item.returnItem(user);
+                        } else {
+                            System.out.println("This user didn't rented this item! Can't return.");
+                        }
+
+                    }
+                }
+            }
+        }
+        System.out.println("\n\nClick anything to return...");
+        scanner.nextLine();
+        Start();
+    }
+    static void Register(){
+        System.out.println("\n\n> Register an User <");
+        String name;
+        do {
+            System.out.println("Name: ");
+            name = scanner.nextLine();
+        } while(name.isBlank());
+        String surname;
+        do {
+            System.out.println("Surname: ");
+            surname = scanner.nextLine();
+        } while(surname.isBlank());
+        long phoneNumber;
+        do {
+            System.out.println("Phone number: ");
+            phoneNumber = scanner.nextLong();
+        } while(Long.toString(phoneNumber).length()!=9);
+        scanner.nextLine();
+        boolean check = true;
+        for(User phoneCheck : User.getUserList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
+            if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
+                check = false;
+                break;
+            }
+        }
+        if(check) {
+            User user = new User(name, surname, (int) phoneNumber);
+            System.out.println("New user: " + user.getFullName() + ", phone number: " + user.getPhoneNumber() + " have been successfully registered!");
+        } else {
+            System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
+        }
+        System.out.println("\n\nClick anything to return...");
+        scanner.nextLine();
+        Start();
     }
     static void Database(){
-        System.out.println("\n\n> Database <\n1. Search for item\n2. Browse through items\n3. Search for member\n4. Add/delete an item\n0. Back");
+        System.out.println("\n\n> Database <\n1. Search for item\n2. Browse through items\n3. Search for member\n4. Get detailed information about an item\n5. Manage items and users\n\n0. Back");
         String option = scanner.nextLine();
         if(option.charAt(0) == '1')
             SearchForItem();
@@ -41,31 +115,25 @@ public class Menu {
         else if(option.charAt(0) == '3')
             SearchForMember();
         else if(option.charAt(0) == '4')
+            GetInfo();
+        else if(option.charAt(0) == '5')
             ManageItems();
         else if(option.charAt(0) == '0'){
             System.out.println("\n\n");
-            start();
+            Start();
         }
         else {
             System.out.println("You had chose option out of possible outcomes. Try again!\n");
             Database();
         }
     }
-    static void Renting(){
-
-    }
-    static void Returning(){
-
-    }
-    static void Register(){
-
-    }
     static void SearchForItem(){
-        System.out.println("\n\n> Search for items <\n1. By ID\n2. By name\n3. By member ID\n0. Back");
+        System.out.println("\n\n> Search for items <\n1. By ID\n2. By name\n3. By member ID\n\n0. Back");
         String option = scanner.nextLine();
         if(option.charAt(0) == '1'){
             System.out.println("\n\n> Search for item by ID <\nID: ");
             int searchID = scanner.nextInt();
+            scanner.nextLine();
             System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
             for (Item item:Item.getItemList()) {
                 if (searchID == item.getId()) {
@@ -74,11 +142,9 @@ public class Menu {
                     System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
                     for (int i = 0; i < item.getRentedByUserID().size(); i++)
                         System.out.printf("%35s %25s\n", item.getRentedByUserID().get(i).getFullName(), item.getRentedByUserID().get(i).getDateOfRenting().get(item.getRentedByUserID().get(i).getRentedItems().indexOf(item)));
-
                 }
             }
             System.out.println("\n\nClick anything to return...");
-            scanner.nextLine();
             scanner.nextLine();
             SearchForItem();
         }
@@ -91,9 +157,8 @@ public class Menu {
                     System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
                     System.out.println("Rented by:");
                     System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                    for(int i=0; i<item.getRentedByUserID().size(); i++)
+                    for (int i = 0; i < item.getRentedByUserID().size(); i++)
                         System.out.printf("%35s %25s\n", item.getRentedByUserID().get(i).getFullName(), item.getRentedByUserID().get(i).getDateOfRenting().get(item.getRentedByUserID().get(i).getRentedItems().indexOf(item)));
-
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -107,8 +172,7 @@ public class Menu {
             for (User user:User.getUserList()) {
                 if(user.getUserID().equals(memberID)){
                     for(int i=0; i<user.getRentedItems().size(); i++){
-                        long daysBetween = DAYS.between(user.getDateOfRenting().get(i).plusMonths(3), LocalDate.now());
-                        System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfRenting().get(i).plusMonths(3), daysBetween*0.57, user.getRentedItems().get(i).getId());
+                        System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfReturning(i), user.getCost(i), user.getRentedItems().get(i).getId());
                     }
                 }
             }
@@ -116,18 +180,19 @@ public class Menu {
             scanner.nextLine();
             SearchForItem();
         }
-        else if(option.charAt(0) == '0')
+        else if(option.charAt(0) == '0'){
             Database();
+        }
         else {
             System.out.println("You had chose option out of possible outcomes. Try again!\n");
             SearchForItem();
         }
     }
     static void BrowseThroughItems(){
-        System.out.println("\n\n> Browse through items <\n1. By type\n2. Less than amount available\n3. More than amount rented\n4. Display all\n0. Back");
+        System.out.println("\n\n> Browse through items <\n1. By type\n2. Less than amount available\n3. More than amount rented\n4. Display all\n\n0. Back");
         String option = scanner.nextLine();
         if(option.charAt(0) == '1') {
-            System.out.println("\n\n> Browse through items by type <\nType: ");
+            System.out.println("\n\n> Browse through items by type <\nType: (types: Book, Publication, Newspaper)");
             String type = scanner.nextLine();
             System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
             for (Item item:Item.getItemList()) {
@@ -180,10 +245,9 @@ public class Menu {
             System.out.println("You had chose option out of possible outcomes. Try again!\n");
             BrowseThroughItems();
         }
-
     }
     static void SearchForMember(){
-        System.out.println("\n\n> Search for member <\n1. By ID\n2. By full name\n3. By phone number\n4. All\n0. Back");
+        System.out.println("\n\n> Search for member <\n1. By ID\n2. By full name\n3. By phone number\n4. Display all\n\n0. Back");
         String option = scanner.nextLine();
         if(option.charAt(0) == '1'){
             System.out.println("\n\n> Search for member by ID <\nMember ID: ");
@@ -230,7 +294,7 @@ public class Menu {
         else if(option.charAt(0) == '4'){
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
             for (User user:User.getUserList())
-                    System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
+                System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
             SearchForMember();
@@ -243,18 +307,752 @@ public class Menu {
             SearchForMember();
         }
     }
+    static void GetInfo() {
+        System.out.println("\n\n> Get detailed information about an item <\n1. By type\n2. By ID\n\n0. Back");
+        String option = scanner.nextLine();
+        if (option.charAt(0) == '1') {
+            System.out.println("\n\n> Get detailed information about an item by type <\n1. Book\n2. Newspaper\n3. Publication");
+            option = scanner.nextLine();
+            if(option.charAt(0) == '1') {
+                System.out.println("\n\n> Get detailed information about a Book <\n1. By author\n2. By publisher");
+                option = scanner.nextLine();
+                if(option.charAt(0) == '1'){
+                    System.out.println("Author: ");
+                    String author = scanner.nextLine();
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Book) {
+                            if (((Book) item).getAuthor().equals(author)) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else if(option.charAt(0) == '2'){
+                    System.out.println("Publisher: ");
+                    String publisher = scanner.nextLine();
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Book) {
+                            if (((Book) item).getPublisher().equals(publisher)) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else {
+                    System.out.println("You had chose option out of possible outcomes. Try again!\n");
+                }
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                GetInfo();
+            }
+            else if(option.charAt(0) == '2') {
+                System.out.println("\n\n> Get detailed information about a Newspaper <\n1. By publisher\n2. Before date of release\n3. After date of release");
+                option = scanner.nextLine();
+                if(option.charAt(0) == '1'){
+                    System.out.println("Publisher: ");
+                    String publisher = scanner.nextLine();
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Newspaper) {
+                            if (((Newspaper) item).getPublisher().equals(publisher)) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else if(option.charAt(0) == '2') {
+                    System.out.println("\n\nAll value of date need to be as integer.");
+                    int year, month, day;
+                    do{
+                        System.out.println("Year: ");
+                        year = scanner.nextInt();
+                    } while(year<1);
+                    scanner.nextLine();
+                    do{
+                        System.out.println("Month: ");
+                        month = scanner.nextInt();
+                    } while(month<1 || month>12);
+                    scanner.nextLine();
+                    if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12) {
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>31);
+                    } else if (month==4 || month==6 || month==9 || month==11){
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>30);
+                    } else {
+                        if(year%4==0){
+                            do{
+                                System.out.println("Day: ");
+                                day = scanner.nextInt();
+                            } while(day<1 || day>29);
+                        } else {
+                            do{
+                                System.out.println("Day: ");
+                                day = scanner.nextInt();
+                            } while(day<1 || day>28);
+                        }
+                    }
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Newspaper) {
+                            if (((Newspaper) item).getRelease().isBefore(LocalDate.of(year, month, day))) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else if(option.charAt(0) == '3') {
+                    System.out.println("\n\nAll value of date need to be as integer.");
+                    int year, month, day;
+                    do{
+                        System.out.println("Year: ");
+                        year = scanner.nextInt();
+                    } while(year<1);
+                    scanner.nextLine();
+                    do{
+                        System.out.println("Month: ");
+                        month = scanner.nextInt();
+                    } while(month<1 || month>12);
+                    scanner.nextLine();
+                    if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12) {
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>31);
+                    } else if (month==4 || month==6 || month==9 || month==11){
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>30);
+                    } else {
+                        if(year%4==0){
+                            do{
+                                System.out.println("Day: ");
+                                day = scanner.nextInt();
+                            } while(day<1 || day>29);
+                        } else {
+                            do{
+                                System.out.println("Day: ");
+                                day = scanner.nextInt();
+                            } while(day<1 || day>28);
+                        }
+                    }
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Newspaper) {
+                            if (((Newspaper) item).getRelease().isAfter(LocalDate.of(year, month, day))) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else {
+                    System.out.println("You had chose option out of possible outcomes. Try again!\n");
+                }
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                GetInfo();
+            }
+            else if(option.charAt(0) == '3') {
+                System.out.println("\n\n> Get detailed information about a Publication <\n1. By author\n2. By topic");
+                option = scanner.nextLine();
+                if(option.charAt(0) == '1'){
+                    System.out.println("Author: ");
+                    String author = scanner.nextLine();
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Publication) {
+                            if (((Publication) item).getAuthors().contains(author)) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else if(option.charAt(0) == '2'){
+                    System.out.println("Topic: ");
+                    String topic = scanner.nextLine();
+                    for(Item item:Item.getItemList()){
+                        if (item instanceof Publication) {
+                            if (((Publication) item).getTopic().contains(topic)) {
+                                item.getInfo();
+                            }
+                        }
+                    }
+                }
+                else {
+                    System.out.println("You had chose option out of possible outcomes. Try again!\n");
+                }
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                GetInfo();
+            }
+            else {
+                System.out.println("You had chose option out of possible outcomes. Try again!\n");
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            GetInfo();
+        }
+        else if (option.charAt(0) == '2'){
+            System.out.println("\n\n> Get detailed information about an item by ID <\nItem ID: ");
+            int searchID = scanner.nextInt();
+            scanner.nextLine();
+            for (Item item:Item.getItemList()) {
+                if (searchID == item.getId())
+                    item.getInfo();
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            GetInfo();
+        }
+        else if(option.charAt(0) == '0'){
+            System.out.println("\n\n");
+            Database();
+        }
+        else {
+            System.out.println("You had chose option out of possible outcomes. Try again!\n");
+            GetInfo();
+        }
+    }
+    static void ManageItems(){
+        System.out.println("\n\n> Manage items and users <\n1. Add an item\n2. Remove an item\n3. Change properties of an item\n4. Remove an user\n5. Change properties of an user\n6. Change general settings\n\n0. Back");
+        //BEFORE REMOVING AN USER THE RENTED ITEMS LIST MUST BE EMPTY!
+        String option = scanner.nextLine();
+        if(option.charAt(0) == '1'){
+            System.out.println("\n\n> Add an item to database <\n1. Book\n2. Newspaper\n3. Publication\n0. Back");
+            option = scanner.nextLine();
+            if(option.charAt(0)=='1'){
+                System.out.println("\n\n> Add a Book to database <");
+                String name, author, publisher, description;
+                do{
+                    System.out.println("Name: ");
+                    name = scanner.nextLine();
+                } while(name.isBlank());
+                do{
+                    System.out.println("Author: ");
+                    author = scanner.nextLine();
+                } while(author.isBlank());
+                do{
+                    System.out.println("Publisher: ");
+                    publisher = scanner.nextLine();
+                } while(publisher.isBlank());
+                do{
+                    System.out.println("Description: ");
+                    description = scanner.nextLine();
+                } while(description.isBlank());
+                int amountAvailable;
+                do{
+                    System.out.println("Amount available: ");
+                    amountAvailable = scanner.nextInt();
+                } while(amountAvailable<0);
+                scanner.nextLine();
+                Book item = new Book(name, author, publisher, description, amountAvailable, 0);
+                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                ManageItems();
+            }
+            else if(option.charAt(0)=='2'){
+                System.out.println("\n\n> Add a Newspaper to database <");
+                String name, publisher;
+                do{
+                    System.out.println("Name: ");
+                    name = scanner.nextLine();
+                } while(name.isBlank());
+                do{
+                    System.out.println("Publisher: ");
+                    publisher = scanner.nextLine();
+                } while(publisher.isBlank());
+                System.out.println("\n\nAll value of date need to be as integer.");
+                int year, month, day, amountAvailable;
+                do{
+                    System.out.println("Year: ");
+                    year = scanner.nextInt();
+                } while(year<1);
+                scanner.nextLine();
+                do{
+                    System.out.println("Month: ");
+                    month = scanner.nextInt();
+                } while(month<1 || month>12);
+                scanner.nextLine();
+                if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12) {
+                    do{
+                        System.out.println("Day: ");
+                        day = scanner.nextInt();
+                    } while(day<1 || day>31);
+                }
+                else if (month==4 || month==6 || month==9 || month==11){
+                    do{
+                        System.out.println("Day: ");
+                        day = scanner.nextInt();
+                    } while(day<1 || day>30);
+                }
+                else {
+                    if(year%4==0){
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>29);
+                    } else {
+                        do{
+                            System.out.println("Day: ");
+                            day = scanner.nextInt();
+                        } while(day<1 || day>28);
+                    }
+                }
+                scanner.nextLine();
+                do{
+                    System.out.println("Amount available: ");
+                    amountAvailable = scanner.nextInt();
+                } while(amountAvailable<0);
+                scanner.nextLine();
+                Newspaper item = new Newspaper(name, publisher, LocalDate.of(year, month, day), amountAvailable, 0);
+                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                ManageItems();
+            }
+            else if(option.charAt(0)=='3'){
+                System.out.println("\n\n> Add a Publication to database <");
+                String name, topic, author;
+                do{
+                    System.out.println("Name: ");
+                    name = scanner.nextLine();
+                } while(name.isBlank());
+                do{
+                    System.out.println("Topic: ");
+                    topic = scanner.nextLine();
+                } while(topic.isBlank());
+                int amountAvailable;
+                do{
+                    System.out.println("Amount available: ");
+                    amountAvailable = scanner.nextInt();
+                } while(amountAvailable<0);
+                scanner.nextLine();
+                Publication item = new Publication(name, topic, amountAvailable, 0);
+                System.out.println("How many authors you want to add for that publication?");
+                int amountOfAuthors = scanner.nextInt();
+                scanner.nextLine();
+                for(; amountOfAuthors>0; amountOfAuthors--) {
+                    do{
+                        System.out.println("Author: ");
+                        author = scanner.nextLine();
+                    } while(author.isBlank());
+                    item.addAuthor(author);
+                }
+                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                ManageItems();
+            }
+            else {
+                System.out.println("\n\n");
+                ManageItems();
+            }
+        }
+        else if(option.charAt(0) == '2'){
+            System.out.println("\n\n> Remove an item from database <\nItem ID: ");
+            int itemID = scanner.nextInt();
+            scanner.nextLine();
+            for (int i = 0; i < Item.getItemList().size(); i++) {
+                if (Item.getItemList().get(i).getId() == itemID) {
+                    Item item = Item.getItemList().get(i);
+                    if (item.getAmountRented() == 0) {
+                            System.out.println("Are you sure you want to remove " + item.getId() + ". " + item.getName() + "?\nY / N");
+                            option = scanner.nextLine();
+                            if (option.charAt(0) == 'Y' || option.charAt(0) == 'y') {
+                                System.out.println("\nItem " + item.getId() + ". " + item.getName() + " has been successfully deleted!");
+                                Item.getItemList().remove(item); //to fix
+                            }
+                            else if (option.charAt(0) == 'N' || option.charAt(0) == 'n') {
+                                System.out.println("\nYou declined deleting an item!");
+                            }
+                            else {
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                            }
+                        }
+                    else {
+                            System.out.println("Can't delete an item! It is still rented by: ");
+                            System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
+                            for (int j = 0; j < item.getRentedByUserID().size(); j++)
+                                System.out.printf("%35s %25s\n", item.getRentedByUserID().get(j).getFullName(), item.getRentedByUserID().get(j).getDateOfRenting().get(item.getRentedByUserID().get(j).getRentedItems().indexOf(item)));
+                        }
+                }
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
+        }
+        else if(option.charAt(0) == '3'){
+            System.out.println("\n\n> Change properties of an item <\nItem ID: ");
+            int itemID = scanner.nextInt();
+            scanner.nextLine();
+            for (Item item:Item.getItemList()) {
+                if (itemID == item.getId())
+                    if(item instanceof Book) {
+                        System.out.println("\n\nChange properties of an Book <\n1. Name\n2. Author\n3. Publisher\n4. Description");
+                        option = scanner.nextLine();
+                        if(option.charAt(0) == '1'){
+                            String name;
+                            do {
+                                name = scanner.nextLine();
+                                System.out.println("Name: ");
+                            } while(name.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            item.setName(name);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '2'){
+                            String author;
+                            do {
+                                author = scanner.nextLine();
+                                System.out.println("Author: ");
+                            } while(author.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Book) item).setAuthor(author);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '3'){
+                            String publisher;
+                            do {
+                                publisher = scanner.nextLine();
+                                System.out.println("Publisher: ");
+                            } while(publisher.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Book) item).setPublisher(publisher);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '4'){
+                            String description;
+                            do {
+                                description = scanner.nextLine();
+                                System.out.println("Description: ");
+                            } while(description.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Book) item).setDescription(description);
+                            getFullInfo(item);
+                        }
+                        else {
+                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                        }
+                    }
+                    else if(item instanceof Newspaper) {
+                        System.out.println("\n\nChange properties of an Newspaper <\n1. Name\n2. Publisher\n3. Date of Release");
+                        option = scanner.nextLine();
+                        if(option.charAt(0) == '1'){
+                            String name;
+                            do {
+                                name = scanner.nextLine();
+                                System.out.println("Name: ");
+                            } while(name.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            item.setName(name);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '2'){
+                            String publisher;
+                            do {
+                                publisher = scanner.nextLine();
+                                System.out.println("Publisher: ");
+                            } while(publisher.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Newspaper) item).setPublisher(publisher);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '3'){
+                            int year, month, day;
+                            do{
+                                System.out.println("Year: ");
+                                year = scanner.nextInt();
+                            } while(year<1);
+                            scanner.nextLine();
+                            do{
+                                System.out.println("Month: ");
+                                month = scanner.nextInt();
+                            } while(month<1 || month>12);
+                            scanner.nextLine();
+                            if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month==12) {
+                                do{
+                                    System.out.println("Day: ");
+                                    day = scanner.nextInt();
+                                } while(day<1 || day>31);
+                            }
+                            else if (month==4 || month==6 || month==9 || month==11){
+                                do{
+                                    System.out.println("Day: ");
+                                    day = scanner.nextInt();
+                                } while(day<1 || day>30);
+                            }
+                            else {
+                                if(year%4==0){
+                                    do{
+                                        System.out.println("Day: ");
+                                        day = scanner.nextInt();
+                                    } while(day<1 || day>29);
+                                } else {
+                                    do{
+                                        System.out.println("Day: ");
+                                        day = scanner.nextInt();
+                                    } while(day<1 || day>28);
+                                }
+                            }
+                            scanner.nextLine();
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Newspaper) item).setRelease(LocalDate.of(year, month, day));
+                            getFullInfo(item);
+                        }
+                        else {
+                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                        }
+                    }
+                    else if(item instanceof Publication) {
+                        System.out.println("\n\nChange properties of an Publication <\n1. Name\n2. Add an author\n3. Remove an author\n4. Topic");
+                        option = scanner.nextLine();
+                        if(option.charAt(0) == '1'){
+                            String name;
+                            do {
+                                name = scanner.nextLine();
+                                System.out.println("Name: ");
+                            } while(name.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            item.setName(name);
+                            getFullInfo(item);
+                        }
+                        else if(option.charAt(0) == '2'){
+                            String author;
+                            do {
+                                author = scanner.nextLine();
+                                System.out.println("Author: ");
+                            } while(author.isBlank());
+                            if(((Publication) item).getAuthors().contains(author)){
+                                System.out.println("This publication already have " + author + " as one of it authors!");
+                            } else {
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Publication) item).getAuthors().add(author);
+                                getFullInfo(item);
+                            }
+                        }
+                        else if(option.charAt(0) == '3'){
+                            String author;
+                            do {
+                                author = scanner.nextLine();
+                                System.out.println("Author: ");
+                            } while(author.isBlank());
+                            if(((Publication) item).getAuthors().contains(author)){
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Publication) item).getAuthors().remove(author);
+                                getFullInfo(item);
+                            } else {
+                                System.out.println("This publication don't have " + author + " as one of it authors!");
+                            }
+                        }
+                        else if(option.charAt(0) == '4'){
+                            String topic;
+                            do {
+                                topic = scanner.nextLine();
+                                System.out.println("Topic: ");
+                            } while(topic.isBlank());
+                            System.out.println("You have successfully change: ");
+                            getFullInfo(item);
+                            System.out.println("To: ");
+                            ((Publication) item).setTopic(topic);
+                            getFullInfo(item);
+                        }
+                        else {
+                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                        }
+                    }
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
+        }
+        else if(option.charAt(0) == '4'){
+            System.out.println("\n\n>  Remove an user <\nUser ID: ");
+            String userID = scanner.nextLine();
+            for (int i = 0; i < User.getUserList().size(); i++) {
+                if (User.getUserList().get(i).getUserID().equals(userID)) {
+                    User user = User.getUserList().get(i);
+                    if (user.getRentedItems().size() == 0) {
+                            System.out.println("Are you sure you want to remove " + user.getUserID() + ". " + user.getFullName() + "?\nY / N");
+                            option = scanner.nextLine();
+                            if (option.charAt(0) == 'Y' || option.charAt(0) == 'y') {
+                                System.out.println("\nUser " + user.getUserID() + ". " + user.getFullName() + " has been successfully deleted!");
+                                User.getUserList().remove(user); //to fix
+                            }
+                            else if (option.charAt(0) == 'N' || option.charAt(0) == 'n') {
+                                System.out.println("\nYou declined deleting an user!");
+                            }
+                            else {
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                            }
+                    }
+                    else {
+                        System.out.println("Can't delete an user! Items rented: ");
+                        System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
+                        for (int j = 0; j < user.getRentedItems().size(); j++) {
+                            System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(j).getId(), user.getRentedItems().get(j).getName(), user.getDateOfRenting().get(j), user.getDateOfReturning(j), user.getCost(j), user.getRentedItems().get(j).getId());
+                        }
+                    }
+                }
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
+            //USER have book left, can't delete him -> if empty, INFO / ARE YOU SURE??? You want to delete this user? -> yes/no
+        }
+        else if(option.charAt(0) == '5'){
+            System.out.println("\n\n> Change properties of an user <\nUser ID: ");
+            String memberID = scanner.nextLine();
+            for (User user : User.getUserList()) {
+                if (user.getUserID().equals(memberID)) {
+                    System.out.println("\n\n> Change properties of an user <\n1. Name\n2. Surname\n3. User ID");
+                    option = scanner.nextLine();
+                    if(option.charAt(0) == '1'){
+                            String name;
+                            do {
+                                name = scanner.nextLine();
+                                System.out.println("Name: ");
+                            } while(name.isBlank());
+                            System.out.println("You have successfully change: ");
+                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                            System.out.println("To: ");
+                            user.setName(name);
+                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        }
+                    else if(option.charAt(0) == '2'){
+                            String surname;
+                            do {
+                                surname = scanner.nextLine();
+                                System.out.println("Surname: ");
+                            } while(surname.isBlank());
+                            System.out.println("You have successfully change: ");
+                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                            System.out.println("To: ");
+                            user.setSurname(surname);
+                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        }
+                    else if(option.charAt(0) == '3'){
+                            long phoneNumber;
+                            do {
+                                System.out.println("Phone number: ");
+                                phoneNumber = scanner.nextLong();
+                                System.out.println(Long.toString(phoneNumber).length());
+                            } while(Long.toString(phoneNumber).length()!=9);
+                            scanner.nextLine();
+                            boolean check = true;
+                            for(User phoneCheck : User.getUserList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
+                                if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
+                                    check = false;
+                                    break;
+                                }
+                            }
+                            if(check) {
+                                System.out.println("You have successfully change: ");
+                                System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                                System.out.println("To: ");
+                                user.setPhoneNumber((int) phoneNumber);
+                                System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                            }
+                            else {
+                                System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
+                            }
+                            System.out.println("\n\nClick anything to return...");
+                            scanner.nextLine();
+                            ManageItems();
+                        }
+                    else {
+                        System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                    }
+                }
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
+            //Which property? -> Change -> Before/After
+        }
+        else if(option.charAt(0) == '6'){
+            System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + User.getMonthsForFree() + ")\n2. Cost per day of delay (now " + User.getCostPerDayOfDelay() + ")\n0. Back");
+            if(option.charAt(0)=='1'){
+                System.out.println("\n\nHow many months are free while renting?");
+                int months;
+                do{
+                    System.out.println("Months: ");
+                    months = scanner.nextInt();
+                } while(months<0);
+                scanner.nextLine();
+                System.out.println("Changed amount of months free from charging after renting from: ");
+                System.out.println(User.getMonthsForFree());
+                System.out.println("To: ");
+                User.setMonthsForFree(months);
+                System.out.println(User.getMonthsForFree());
+            }
+            else if(option.charAt(0)=='2'){
+                System.out.println("\n\nCost per day of delay");
+                double cost;
+                do{
+                    System.out.println("Cost: ");
+                    cost = scanner.nextDouble();
+                } while(cost<0);
+                System.out.println("Changed cost per every day of delay from: ");
+                System.out.println(User.getMonthsForFree());
+                System.out.println("To: ");
+                User.setCostPerDayOfDelay(cost);
+                System.out.println(User.getMonthsForFree());
+            }
+            else if(option.charAt(0)=='0'){
+                System.out.println("\n\n");
+                ManageItems();
+            }
+            else {
+                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
+        }
+        else if(option.charAt(0) == '0'){
+            Database();
+        }
+        else {
+            System.out.println("You had chose option out of possible outcomes. Try again!\n");
+            ManageItems();
+        }
+    }
     private static void printItemsRented(User user){
         if(user.getRentedItems().size()>0) {
             System.out.println("Items rented:");
             System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
             for (int i = 0; i < user.getRentedItems().size(); i++) {
-                long daysBetween = DAYS.between(user.getDateOfRenting().get(i).plusMonths(3), LocalDate.now());
-                System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfRenting().get(i).plusMonths(3), daysBetween*0.57, user.getRentedItems().get(i).getId());
+                System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getRentedItems().get(i).getId(), user.getRentedItems().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfReturning(i), user.getCost(i), user.getRentedItems().get(i).getId());
             }
             System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
         }
     }
-    static void ManageItems(){
-
+    private static void getFullInfo(Item item){
+        System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
+        System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+        item.getInfo();
     }
 }
+

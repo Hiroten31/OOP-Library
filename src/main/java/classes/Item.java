@@ -1,38 +1,22 @@
 package classes;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Item {
+public abstract class Item implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -8254487033175773570L;
     private static int count;
-    int id, amountAvailable, amountRented;
-    String name;
+    protected int id, amountAvailable = 0, amountRented = 0;
+    protected String name;
     List<User> rentedByUsersID = new ArrayList<>();
-    static List<Item> Items = new ArrayList<>();
-    static int getCount() {
-        return count;
-    }
+    static ArrayList<Item> Items = new ArrayList<>();
     Item() {
         ++count;
+        this.id = count;
         Items.add(this);
-    }
-    public void rentItem(User user){
-        amountAvailable--;
-        amountRented++;
-        rentedByUsersID.add(user);
-        user.rentsItem(this);
-    }
-    public void returnItem(User user){
-        amountAvailable++;
-        amountRented--;
-        rentedByUsersID.remove(user);
-        user.returnsItem(this);
-    }
-    public static List<Item> getItemList(){
-        return Items;
-    }
-    public String getName(){
-        return name;
     }
     public int getId(){
         return id;
@@ -40,17 +24,51 @@ public abstract class Item {
     public int getAmountAvailable(){
         return amountAvailable;
     }
+    public void setAmountAvailable(int amountAvailable) {
+        this.amountAvailable = amountAvailable;
+    }
     public int getAmountRented(){
         return amountRented;
+    }
+    public void setAmountRented(int amountRented) {
+        this.amountRented = amountRented;
+    }
+    public String getName(){
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public static ArrayList<Item> getItemList(){
+        return Items;
+    }
+    public static void setItems(ArrayList<Item> items){
+        Items = items;
+        if(items.size()!=0)
+            count = items.get(items.size()-1).getId();
     }
     public List<User> getRentedByUserID(){
         return rentedByUsersID;
     }
-
-    /*super() which cancels 'id = Item.getCount();' in kid classes, so I am disabling it.
-    Item(String name, int amountAvailable, int amountRented){
-        this.name = name;
-        this.amountAvailable = amountAvailable;
-        this.amountRented = amountRented;
-    }*/
+    public void rentItem(User user){
+        if(amountAvailable>0) {
+            amountAvailable--;
+            amountRented++;
+            rentedByUsersID.add(user);
+            user.rentsItem(this);
+        } else {
+            System.out.println("You can't rent this item! There is not a single one available!");
+        }
+    }
+    public void returnItem(User user){
+        if(amountRented>0) {
+            amountAvailable++;
+            amountRented--;
+            rentedByUsersID.remove(user);
+            user.returnsItem(this);
+        } else {
+            System.out.println("You can't return this item! There is not a single one rented!");
+        }
+    }
+    public abstract void getInfo();
 }

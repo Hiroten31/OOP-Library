@@ -1,37 +1,90 @@
 package classes;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+import static java.time.temporal.ChronoUnit.DAYS;
+
+public class User implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -944824420716579638L;
     private String name, surname, userID;
+    private Integer phoneNumber;
     private final LocalDate joinDate;
     private List<LocalDate> dateOfRenting = new ArrayList<>();
-    private Integer phoneNumber;
     private List<Item> ItemsRented = new ArrayList<>();
-    static List<User> Users = new ArrayList<>();
-    public User(String name, String surname, LocalDate joinDate){
+    static ArrayList<User> Users = new ArrayList<>();
+    private static int monthsForFree;
+    private static double costPerDayOfDelay;
+    public User(String name, String surname, Integer phoneNumber){
         this.name = name;
         this.surname = surname;
-        this.joinDate = joinDate;
-        userID = "" + name.charAt(0) + surname.charAt(0) + joinDate.getYear() + joinDate.getMonth() + joinDate.getDayOfMonth();
-    }
-    public User(String name, String surname, LocalDate joinDate, Integer phoneNumber){
-        this.name = name;
-        this.surname = surname;
-        this.joinDate = joinDate;
+        this.joinDate = LocalDate.now();
         this.phoneNumber = phoneNumber;
         userID = phoneNumber.toString();
         Users.add(this);
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+    public String getSurname() {
+        return surname;
+    }
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+    public String getFullName(){
+        return name+" "+surname;
+    }
+    public String getUserID() {
+        return userID;
+    }
+    public Integer getPhoneNumber() {
+        return phoneNumber;
     }
     public void setPhoneNumber(Integer phoneNumber){
         this.phoneNumber = phoneNumber;
         userID = phoneNumber.toString();
     }
-    public String getUserID() {
-        return userID;
+    public LocalDate getJoinDate() {
+        return joinDate;
+    }
+    public List<LocalDate> getDateOfRenting(){
+        return dateOfRenting;
+    }
+    public double getCost(int i){
+        return DAYS.between(getDateOfRenting().get(i).plusMonths(monthsForFree), LocalDate.now())*costPerDayOfDelay;
+    }
+    public LocalDate getDateOfReturning(int i){
+        return getDateOfRenting().get(i).plusMonths(monthsForFree);
+    }
+    public List<Item> getRentedItems(){
+        return ItemsRented;
+    }
+    public static ArrayList<User> getUserList(){
+        return Users;
+    }
+    public static void setUsers(ArrayList<User> users){
+        Users = users;
+    }
+    public static int getMonthsForFree(){
+        return monthsForFree;
+    }
+    public static void setMonthsForFree(int i){
+        monthsForFree = i;
+    }
+    public static double getCostPerDayOfDelay(){
+        return costPerDayOfDelay;
+    }
+    public static void setCostPerDayOfDelay(double i){
+        costPerDayOfDelay = i;
     }
     public void rentsItem(Item item){
         ItemsRented.add(item);
@@ -40,34 +93,5 @@ public class User {
     public void returnsItem(Item item){
         dateOfRenting.remove(ItemsRented.indexOf(item));
         ItemsRented.remove(item);
-    }
-    public String getFullName(){
-        return name+" "+surname;
-    }
-    public List<Item> getRentedItems(){
-        return ItemsRented;
-    }
-    public static User getUserById(String memberID){
-        for (User user:Users) {
-            if(user.getUserID().equals(memberID)){
-                return user;
-            }
-        }
-        return null;
-    }
-
-    public LocalDate getJoinDate() {
-        return joinDate;
-    }
-
-    public Integer getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public static List<User> getUserList(){
-        return Users;
-    }
-    public List<LocalDate> getDateOfRenting(){
-        return dateOfRenting;
     }
 }
