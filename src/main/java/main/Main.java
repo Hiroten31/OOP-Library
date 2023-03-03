@@ -10,14 +10,15 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         //Directory of files storing Items and Users data.
-        File itemsFile = new File("src/main/java/data/Items.ser");
+        File ItemsFile = new File("src/main/java/data/Items.ser");
         File UsersFile = new File("src/main/java/data/Users.ser");
+        File SettingsFile = new File("src/main/java/data/Settings.txt");
 
         ////Loading
         //Items
-        if(itemsFile.exists()){
+        if(ItemsFile.exists()){
             try {
-                FileInputStream readData = new FileInputStream(itemsFile);
+                FileInputStream readData = new FileInputStream(ItemsFile);
                 ObjectInputStream readStream = new ObjectInputStream(readData);
                 Item.setItems((ArrayList<Item>) readStream.readObject());
                 readStream.close();
@@ -42,6 +43,19 @@ public class Main {
         } else {
             System.out.println("There is no file to load Users data from.\nCheck if had you provide correct direction.\nIgnore if it is the first time running the program!");
         }
+        //Settings
+        if(SettingsFile.exists()){
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(SettingsFile));
+                User.setMonthsForFree(Integer.parseInt(br.readLine()));
+                User.setCostPerDayOfDelay(Double.parseDouble(br.readLine()));
+                System.out.println("Settings loaded.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("There is no file to load Settings from.\nCheck if had you provide correct direction.\nIgnore if it is the first time running the program!");
+        }
         /*Book book1 = new Book("Wesele", "Stanislaw Wyspianski", "Greg", "Wesele w serii Kolorowa Klasyka to najpiękniejsze kolorowe wydanie tej powieści na rynku! Książka zawiera wspaniałe, barwne ilustracje, jej atutem jest duża, ułatwiająca szybkie czytanie czcionka. Edycja na szlachetnym papierze, bardzo trwała i estetyczna.\n" + "W podkrakowskiej wsi Bronowice w roku 1900 odbyło się wesele Lucjana Rydla z chłopką Jadwigą Mikołajczykówną. Wydarzenie stało się kanwą do jednego z największych polskich dramatów - Wesela Stanisława Wyspiańskiego.\n" + "Na przełomie wieków Polska wciąż nie istniała na mapie Europy. Na weselu bawią się przedstawiciele różnych grup społecznych i nacji. Każda z nich ma inne problemy i inne marzenia, ale pamięć o niepodległej Polsce wciąż jeszcze jest żywa.\n" + "Wielki dramat mówiący o uczuciach Polaków, ich pragnieniach, marzeniach, bohaterach narodowych, ale i upiorach, które nie dają spokoju. Czy Polacy są jeszcze w stanie walczyć o niepodległość, czy pogrążą się w bezładnym chocholim tańcu?\n" + "Piękne wydanie zostało wzbogacone o reprodukcje dzieł z epoki - Teodora Axentowicza, Jacka Malczewskiego, Leona Wyczółkowskiego i samego Wyspiańskiego - oraz o niezwykle ciekawą „Plotkę o Weselu Wyspiańskiego” Tadeusza Boya-Żeleńskiego.", 20, 0);
         Book book2 = new Book("Maly Ksiaze", "Antoine De Saint-Exupery", "Wydawnictwo SBM", "Specjalna edycja klasyki literatury – Mały Książę Antoine’a de Saint- Exupéry – to książka, którą warto mieć w swojej domowej biblioteczce i do której warto wracać.\n" + "Niezwykłe spotkanie w środku pustyni – pilot, który wraz ze swym samolotem spadł z nieba, mały przybysz z nieznanej planety i tajemniczy lis. Oto opowieść o dorastaniu do wiernej miłości, przyjaźni, lojalności i odpowiedzialności za drugiego człowieka.", 50, 0);
         Publication publication1 = new Publication("Educational rationality and religious education in Polish public schools", "Journal of Beliefs and Values", 0, 0 );
@@ -63,7 +77,7 @@ public class Main {
         //Items
         System.out.println("\n\n");
         try {
-            FileOutputStream writeData = new FileOutputStream(itemsFile);
+            FileOutputStream writeData = new FileOutputStream(ItemsFile);
             ObjectOutputStream writeStream = new ObjectOutputStream(writeData);
             writeStream.writeObject(Item.getItemList());
             writeStream.flush();
@@ -81,6 +95,17 @@ public class Main {
             writeStream.close();
             System.out.println("Users saved.");
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Settings
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(SettingsFile));
+            bw.write(User.getMonthsForFree() + "\n");
+            bw.write(User.getCostPerDayOfDelay() + "\n");
+            bw.flush();
+            bw.close();
+            System.out.println("Settings saved.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("\n\n");

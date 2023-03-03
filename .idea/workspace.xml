@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Done charging user for delayed returning. 3 months free, then 0.57 for every day. TODO saving all objects and basic operations on them like add/removing them.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/data/Items.ser" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/data/Users.ser" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/data/Settings.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Newspaper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Publication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Publication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/classes/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.ser" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Menu.java" afterDir="false" />
     </list>

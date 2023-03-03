@@ -992,7 +992,8 @@ public class Menu {
             //Which property? -> Change -> Before/After
         }
         else if(option.charAt(0) == '6'){
-            System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + User.getMonthsForFree() + ")\n2. Cost per day of delay (now " + User.getCostPerDayOfDelay() + ")\n0. Back");
+            System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + User.getMonthsForFree() + ")\n2. Cost per day of delay (now " + User.getCostPerDayOfDelay() + ")\n\n0. Back");
+            option = scanner.nextLine();
             if(option.charAt(0)=='1'){
                 System.out.println("\n\nHow many months are free while renting?");
                 int months;
@@ -1006,6 +1007,9 @@ public class Menu {
                 System.out.println("To: ");
                 User.setMonthsForFree(months);
                 System.out.println(User.getMonthsForFree());
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                ManageItems();
             }
             else if(option.charAt(0)=='2'){
                 System.out.println("\n\nCost per day of delay");
@@ -1014,11 +1018,15 @@ public class Menu {
                     System.out.println("Cost: ");
                     cost = scanner.nextDouble();
                 } while(cost<0);
+                scanner.nextLine();
                 System.out.println("Changed cost per every day of delay from: ");
-                System.out.println(User.getMonthsForFree());
+                System.out.println(User.getCostPerDayOfDelay());
                 System.out.println("To: ");
                 User.setCostPerDayOfDelay(cost);
-                System.out.println(User.getMonthsForFree());
+                System.out.println(User.getCostPerDayOfDelay());
+                System.out.println("\n\nClick anything to return...");
+                scanner.nextLine();
+                ManageItems();
             }
             else if(option.charAt(0)=='0'){
                 System.out.println("\n\n");
@@ -1027,9 +1035,6 @@ public class Menu {
             else {
                 System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
             }
-            System.out.println("\n\nClick anything to return...");
-            scanner.nextLine();
-            ManageItems();
         }
         else if(option.charAt(0) == '0'){
             Database();
