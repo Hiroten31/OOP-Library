@@ -9,27 +9,27 @@ import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class User implements Serializable {
+public class Member implements Serializable {
     @Serial
     private static final long serialVersionUID = -944824420716579638L;
 
-    private String name, surname, userID;
+    private String name, surname, memberID;
     private Integer phoneNumber;
     private final LocalDate joinDate;
     private final List<LocalDate> dateOfRenting = new ArrayList<>();
     private final List<Item> ItemsRented = new ArrayList<>();
-    static ArrayList<User> Users = new ArrayList<>();
+    static ArrayList<Member> members = new ArrayList<>();
     private static int monthsForFree;
     private static double costPerDayOfDelay;
 
     //Basic method to create an object
-    public User(String name, String surname, Integer phoneNumber){
+    public Member(String name, String surname, Integer phoneNumber){
         this.name = name;
         this.surname = surname;
         this.joinDate = LocalDate.now();
         this.phoneNumber = phoneNumber;
-        userID = phoneNumber.toString();
-        Users.add(this);
+        memberID = phoneNumber.toString();
+        members.add(this);
     }
 
     //Getters and Setters
@@ -41,8 +41,8 @@ public class User implements Serializable {
         this.surname = surname;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getMemberID() {
+        return memberID;
     }
 
     public Integer getPhoneNumber() {
@@ -51,7 +51,7 @@ public class User implements Serializable {
 
     public void setPhoneNumber(Integer phoneNumber){
         this.phoneNumber = phoneNumber;
-        userID = phoneNumber.toString();
+        memberID = phoneNumber.toString();
     }
 
     public LocalDate getJoinDate() {
@@ -66,12 +66,12 @@ public class User implements Serializable {
         return ItemsRented;
     }
 
-    public static ArrayList<User> getUserList(){
-        return Users;
+    public static ArrayList<Member> getMemberList(){
+        return members;
     }
 
-    public static void setUsers(ArrayList<User> users){
-        Users = users;
+    public static void setMembers(ArrayList<Member> members){
+        Member.members = members;
     }
 
     public static int getMonthsForFree(){

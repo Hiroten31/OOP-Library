@@ -29,7 +29,7 @@ public class Menu {
 
     //Method accessed from Start()
     static void Database(){
-        System.out.println("\n\n> Database <\n1. Search for item\n2. Browse through items\n3. Search for member\n4. Get detailed information about an item\n5. Manage items and users\n\n0. Back");
+        System.out.println("\n\n> Database <\n1. Search for item\n2. Browse through items\n3. Search for member\n4. Get detailed information about an item\n5. Manage items and members\n\n0. Back");
         String option = notBlank();
         if(option.charAt(0) == '1')
             SearchForItem();
@@ -60,10 +60,10 @@ public class Menu {
                 if(item.getAmountAvailable()>0) {
                     System.out.println("Member ID: ");
                     String memberID = scanner.nextLine();
-                    for(User user : User.getUserList()){
-                        if(user.getUserID().equals(memberID)) {
-                            System.out.println("User " + user.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
-                            item.rentItem(user);
+                    for(Member member : Member.getMemberList()){
+                        if(member.getMemberID().equals(memberID)) {
+                            System.out.println("Member " + member.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
+                            item.rentItem(member);
                             break;
                         }
                     }
@@ -88,14 +88,14 @@ public class Menu {
                 if(item.getAmountRented()>0) {
                     System.out.println("Member ID: ");
                     String memberID = scanner.nextLine();
-                    for(User user : User.getUserList()) {
-                        if(user.getUserID().equals(memberID)) {
-                            if(item.getRentedByUserID().contains(user)) {
-                                System.out.println("User " + user.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
-                                item.returnItem(user);
+                    for(Member member : Member.getMemberList()) {
+                        if(member.getMemberID().equals(memberID)) {
+                            if(item.getRentedByMemberID().contains(member)) {
+                                System.out.println("Member " + member.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
+                                item.returnItem(member);
                             }
                             else {
-                                System.out.println("This user didn't rented this item! Can't return.");
+                                System.out.println("This member didn't rented this item! Can't return.");
                             }
                             break;
                         }
@@ -113,7 +113,7 @@ public class Menu {
     }
 
     static void Register(){
-        System.out.println("\n\n> Register an User <");
+        System.out.println("\n\n> Register an Member <");
         String name, surname;
         name = notBlank("Name: ");
         surname = notBlank("Surname: ");
@@ -124,15 +124,15 @@ public class Menu {
         } while(Long.toString(phoneNumber).length()!=9);
         scanner.nextLine();
         boolean check = true;
-        for(User phoneCheck : User.getUserList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
+        for(Member phoneCheck : Member.getMemberList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
             if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
                 check = false;
                 break;
             }
         }
         if(check) {
-            User user = new User(name, surname, (int) phoneNumber);
-            System.out.println("New user: " + user.getFullName() + ", phone number: " + user.getPhoneNumber() + " have been successfully registered!");
+            Member member = new Member(name, surname, (int) phoneNumber);
+            System.out.println("New member: " + member.getFullName() + ", phone number: " + member.getPhoneNumber() + " have been successfully registered!");
         }
         else {
             System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
@@ -156,8 +156,8 @@ public class Menu {
                     System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
                     System.out.println("Rented by:");
                     System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                    for(int i = 0; i < item.getRentedByUserID().size(); i++)
-                        System.out.printf("%35s %25s\n", item.getRentedByUserID().get(i).getFullName(), item.getRentedByUserID().get(i).getDateOfRenting().get(item.getRentedByUserID().get(i).getItemsRented().indexOf(item)));
+                    for(int i = 0; i < item.getRentedByMemberID().size(); i++)
+                        System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(i).getFullName(), item.getRentedByMemberID().get(i).getDateOfRenting().get(item.getRentedByMemberID().get(i).getItemsRented().indexOf(item)));
                     break;
                 }
             }
@@ -174,8 +174,8 @@ public class Menu {
                     System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
                     System.out.println("Rented by:");
                     System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                    for(int i = 0; i < item.getRentedByUserID().size(); i++)
-                        System.out.printf("%35s %25s\n", item.getRentedByUserID().get(i).getFullName(), item.getRentedByUserID().get(i).getDateOfRenting().get(item.getRentedByUserID().get(i).getItemsRented().indexOf(item)));
+                    for(int i = 0; i < item.getRentedByMemberID().size(); i++)
+                        System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(i).getFullName(), item.getRentedByMemberID().get(i).getDateOfRenting().get(item.getRentedByMemberID().get(i).getItemsRented().indexOf(item)));
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -186,10 +186,10 @@ public class Menu {
             System.out.println("\n\n> Search for items by member ID <\nMember ID: ");
             String memberID = scanner.nextLine();
             System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
-            for(User user : User.getUserList()) {
-                if(user.getUserID().equals(memberID)){
-                    for(int i = 0; i<user.getItemsRented().size(); i++)
-                        System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getItemsRented().get(i).getId(), user.getItemsRented().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfReturning(i), user.getCost(i), user.getItemsRented().get(i).getId());
+            for(Member member : Member.getMemberList()) {
+                if(member.getMemberID().equals(memberID)){
+                    for(int i = 0; i< member.getItemsRented().size(); i++)
+                        System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", member.getItemsRented().get(i).getId(), member.getItemsRented().get(i).getName(), member.getDateOfRenting().get(i), member.getDateOfReturning(i), member.getCost(i), member.getItemsRented().get(i).getId());
                     break;
                 }
             }
@@ -272,10 +272,10 @@ public class Menu {
             System.out.println("\n\n> Search for member by ID <\nMember ID: ");
             String memberID = scanner.nextLine();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-            for(User user : User.getUserList()) {
-                if(user.getUserID().equals(memberID)) {
-                    System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    printItemsRented(user);
+            for(Member member : Member.getMemberList()) {
+                if(member.getMemberID().equals(memberID)) {
+                    System.out.printf("%10s %-35s %25s %10d\n", member.getMemberID(), member.getFullName(), member.getJoinDate(), member.getPhoneNumber());
+                    printItemsRented(member);
                     break;
                 }
             }
@@ -287,10 +287,10 @@ public class Menu {
             System.out.println("\n\n> Search for member by full name <\nFull name: ");
             String fullName = scanner.nextLine();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-            for(User user : User.getUserList()) {
-                if(user.getFullName().equals(fullName)) {
-                    System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    printItemsRented(user);
+            for(Member member : Member.getMemberList()) {
+                if(member.getFullName().equals(fullName)) {
+                    System.out.printf("%10s %-35s %25s %10d\n", member.getMemberID(), member.getFullName(), member.getJoinDate(), member.getPhoneNumber());
+                    printItemsRented(member);
                 }
             }
             System.out.println("\n\nClick anything to return...");
@@ -301,10 +301,10 @@ public class Menu {
             System.out.println("\n\n> Search for member by phone number <\nPhone number: ");
             String phoneNumber = scanner.nextLine();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-            for(User user : User.getUserList()) {
-                if(user.getPhoneNumber().toString().equals(phoneNumber)){
-                    System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
-                    printItemsRented(user);
+            for(Member member : Member.getMemberList()) {
+                if(member.getPhoneNumber().toString().equals(phoneNumber)){
+                    System.out.printf("%10s %-35s %25s %10d\n", member.getMemberID(), member.getFullName(), member.getJoinDate(), member.getPhoneNumber());
+                    printItemsRented(member);
                     break;
                 }
             }
@@ -314,8 +314,8 @@ public class Menu {
         }
         else if(option.charAt(0) == '4'){
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
-            for(User user : User.getUserList())
-                System.out.printf("%10s %-35s %25s %10d\n", user.getUserID(), user.getFullName(), user.getJoinDate(), user.getPhoneNumber());
+            for(Member member : Member.getMemberList())
+                System.out.printf("%10s %-35s %25s %10d\n", member.getMemberID(), member.getFullName(), member.getJoinDate(), member.getPhoneNumber());
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
             SearchForMember();
@@ -465,7 +465,7 @@ public class Menu {
     }
 
     static void ManageItems(){
-        System.out.println("\n\n> Manage items and users <\n1. Add an item\n2. Remove an item\n3. Change properties of an item\n4. Remove an user\n5. Change properties of an user\n6. Change general settings\n\n0. Back");
+        System.out.println("\n\n> Manage items and members <\n1. Add an item\n2. Remove an item\n3. Change properties of an item\n4. Remove an member\n5. Change properties of an member\n6. Change general settings\n\n0. Back");
         String option = notBlank();
         if(option.charAt(0) == '1'){
             System.out.println("\n\n> Add an item to database <\n1. Book\n2. Newspaper\n3. Publication\n\n0. Back");
@@ -562,8 +562,8 @@ public class Menu {
                     else {
                         System.out.println("Can't delete an item! It is still rented by: ");
                         System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                        for(int j = 0; j < item.getRentedByUserID().size(); j++)
-                            System.out.printf("%35s %25s\n", item.getRentedByUserID().get(j).getFullName(), item.getRentedByUserID().get(j).getDateOfRenting().get(item.getRentedByUserID().get(j).getItemsRented().indexOf(item)));
+                        for(int j = 0; j < item.getRentedByMemberID().size(); j++)
+                            System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(j).getFullName(), item.getRentedByMemberID().get(j).getDateOfRenting().get(item.getRentedByMemberID().get(j).getItemsRented().indexOf(item)));
                     }
                     break;
                 }
@@ -706,29 +706,29 @@ public class Menu {
             ManageItems();
         }
         else if(option.charAt(0) == '4'){
-            System.out.println("\n\n>  Remove an user <\nUser ID: ");
-            String userID = scanner.nextLine();
-            for(User user : User.getUserList()) {
-                if(user.getUserID().equals(userID)) {
-                    if(user.getItemsRented().size() == 0) {
-                        System.out.println("Are you sure you want to remove " + user.getUserID() + ". " + user.getFullName() + "?\nY / N");
+            System.out.println("\n\n>  Remove an member <\nMember ID: ");
+            String memberID = scanner.nextLine();
+            for(Member member : Member.getMemberList()) {
+                if(member.getMemberID().equals(memberID)) {
+                    if(member.getItemsRented().size() == 0) {
+                        System.out.println("Are you sure you want to remove " + member.getMemberID() + ". " + member.getFullName() + "?\nY / N");
                         option = notBlank();
                         if(option.charAt(0) == 'Y' || option.charAt(0) == 'y') {
-                            System.out.println("\nUser " + user.getUserID() + ". " + user.getFullName() + " has been successfully deleted!");
-                            User.getUserList().remove(user); //Fixed ConcurrentModificationException by adding break, which also improves efficiency
+                            System.out.println("\nMember " + member.getMemberID() + ". " + member.getFullName() + " has been successfully deleted!");
+                            Member.getMemberList().remove(member); //Fixed ConcurrentModificationException by adding break, which also improves efficiency
                         }
                         else if(option.charAt(0) == 'N' || option.charAt(0) == 'n') {
-                            System.out.println("\nYou declined deleting an user!");
+                            System.out.println("\nYou declined deleting an member!");
                         }
                         else {
                             System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
                         }
                     }
                     else {
-                        System.out.println("Can't delete an user! Items rented: ");
+                        System.out.println("Can't delete an member! Items rented: ");
                         System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
-                        for(int j = 0; j < user.getItemsRented().size(); j++)
-                            System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getItemsRented().get(j).getId(), user.getItemsRented().get(j).getName(), user.getDateOfRenting().get(j), user.getDateOfReturning(j), user.getCost(j), user.getItemsRented().get(j).getId());
+                        for(int j = 0; j < member.getItemsRented().size(); j++)
+                            System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", member.getItemsRented().get(j).getId(), member.getItemsRented().get(j).getName(), member.getDateOfRenting().get(j), member.getDateOfReturning(j), member.getCost(j), member.getItemsRented().get(j).getId());
                     }
                     break;
                 }
@@ -738,27 +738,27 @@ public class Menu {
             ManageItems();
         }
         else if(option.charAt(0) == '5'){
-            System.out.println("\n\n> Change properties of an user <\nUser ID: ");
+            System.out.println("\n\n> Change properties of an Member <\nMember ID: ");
             String memberID = scanner.nextLine();
-            for(User user : User.getUserList()) {
-                if (user.getUserID().equals(memberID)) {
-                    System.out.println("\n\n> Change properties of an user <\n1. Name\n2. Surname\n3. User ID");
+            for(Member member : Member.getMemberList()) {
+                if (member.getMemberID().equals(memberID)) {
+                    System.out.println("\n\n> Change properties of an member <\n1. Name\n2. Surname\n3. Member ID");
                     option = notBlank();
                     if(option.charAt(0) == '1'){
                         String name = notBlank("Name: ");
                         System.out.println("You have successfully change: ");
-                        System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                         System.out.println("To: ");
-                        user.setName(name);
-                        System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        member.setName(name);
+                        System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                     }
                     else if(option.charAt(0) == '2'){
                         String surname = notBlank("Surname: ");
                         System.out.println("You have successfully change: ");
-                        System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                         System.out.println("To: ");
-                        user.setSurname(surname);
-                        System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                        member.setSurname(surname);
+                        System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                     }
                     else if(option.charAt(0) == '3'){
                         long phoneNumber;
@@ -769,7 +769,7 @@ public class Menu {
                         } while(Long.toString(phoneNumber).length()!=9);
                         scanner.nextLine();
                         boolean check = true;
-                        for(User phoneCheck : User.getUserList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
+                        for(Member phoneCheck : Member.getMemberList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
                             if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
                                 check = false;
                                 break;
@@ -777,10 +777,10 @@ public class Menu {
                         }
                         if(check) {
                             System.out.println("You have successfully change: ");
-                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                            System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                             System.out.println("To: ");
-                            user.setPhoneNumber((int) phoneNumber);
-                            System.out.println(user.getUserID() + ". " + user.getFullName() + ", phone number: " + user.getPhoneNumber());
+                            member.setPhoneNumber((int) phoneNumber);
+                            System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                         }
                         else {
                             System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
@@ -797,7 +797,7 @@ public class Menu {
             ManageItems();
         }
         else if(option.charAt(0) == '6'){
-            System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + User.getMonthsForFree() + ")\n2. Cost per day of delay (now " + User.getCostPerDayOfDelay() + ")\n\n0. Back");
+            System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + Member.getMonthsForFree() + ")\n2. Cost per day of delay (now " + Member.getCostPerDayOfDelay() + ")\n\n0. Back");
             option = notBlank();
             if(option.charAt(0)=='1'){
                 System.out.println("\n\nHow many months are free while renting?");
@@ -808,10 +808,10 @@ public class Menu {
                 } while(months<0);
                 scanner.nextLine();
                 System.out.println("Changed amount of months free from charging after renting from: ");
-                System.out.println(User.getMonthsForFree());
+                System.out.println(Member.getMonthsForFree());
                 System.out.println("To: ");
-                User.setMonthsForFree(months);
-                System.out.println(User.getMonthsForFree());
+                Member.setMonthsForFree(months);
+                System.out.println(Member.getMonthsForFree());
                 System.out.println("\n\nClick anything to return...");
                 scanner.nextLine();
                 ManageItems();
@@ -825,10 +825,10 @@ public class Menu {
                 } while(cost<0);
                 scanner.nextLine();
                 System.out.println("Changed cost per every day of delay from: ");
-                System.out.println(User.getCostPerDayOfDelay());
+                System.out.println(Member.getCostPerDayOfDelay());
                 System.out.println("To: ");
-                User.setCostPerDayOfDelay(cost);
-                System.out.println(User.getCostPerDayOfDelay());
+                Member.setCostPerDayOfDelay(cost);
+                System.out.println(Member.getCostPerDayOfDelay());
                 System.out.println("\n\nClick anything to return...");
                 scanner.nextLine();
                 ManageItems();
@@ -851,12 +851,12 @@ public class Menu {
     }
 
     //Private methods only to shorten the code
-    private static void printItemsRented(User user){
-        if(user.getItemsRented().size()>0) {
+    private static void printItemsRented(Member member){
+        if(member.getItemsRented().size()>0) {
             System.out.println("Items rented:");
             System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
-            for(int i = 0; i < user.getItemsRented().size(); i++) {
-                System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", user.getItemsRented().get(i).getId(), user.getItemsRented().get(i).getName(), user.getDateOfRenting().get(i), user.getDateOfReturning(i), user.getCost(i), user.getItemsRented().get(i).getId());
+            for(int i = 0; i < member.getItemsRented().size(); i++) {
+                System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", member.getItemsRented().get(i).getId(), member.getItemsRented().get(i).getName(), member.getDateOfRenting().get(i), member.getDateOfReturning(i), member.getCost(i), member.getItemsRented().get(i).getId());
             }
             System.out.printf("\n%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
         }

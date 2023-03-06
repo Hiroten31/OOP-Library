@@ -13,7 +13,7 @@ public abstract class Item implements Serializable {
     private final int id;
     protected int amountAvailable = 0, amountRented = 0;
     protected String name;
-    private final List<User> rentedByUsersID = new ArrayList<>();
+    private final List<Member> rentedByMembersID = new ArrayList<>();
     static ArrayList<Item> Items = new ArrayList<>();
 
     //Method used to make unique ID for every single item created and adding it to a list.
@@ -54,23 +54,23 @@ public abstract class Item implements Serializable {
             count = items.get(items.size()-1).getId(); //It sets our static count variable to right value, very important due to lack of serialization of static variables.
     }
 
-    public List<User> getRentedByUserID(){
-        return rentedByUsersID;
+    public List<Member> getRentedByMemberID(){
+        return rentedByMembersID;
     }
 
     //Methods
-    public void rentItem(User user){
+    public void rentItem(Member member){
         amountAvailable--;
         amountRented++;
-        rentedByUsersID.add(user);
-        user.rentsItem(this);
+        rentedByMembersID.add(member);
+        member.rentsItem(this);
     }
 
-    public void returnItem(User user){
+    public void returnItem(Member member){
         amountAvailable++;
         amountRented--;
-        rentedByUsersID.remove(user);
-        user.returnsItem(this);
+        rentedByMembersID.remove(member);
+        member.returnsItem(this);
     }
 
     //Simple interface method, which is used to print out all the unique information of an item.
