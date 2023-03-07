@@ -100,7 +100,10 @@ public class Member implements Serializable {
     }
 
     public double getCost(int i){
-        return DAYS.between(getDateOfRenting().get(i).plusMonths(monthsForFree), LocalDate.now())*costPerDayOfDelay;
+        if(getDateOfRenting().get(i).plusMonths(monthsForFree).isBefore(LocalDate.now())){
+            return DAYS.between(getDateOfRenting().get(i).plusMonths(monthsForFree), LocalDate.now())*costPerDayOfDelay;
+        }
+        return 0;
     }
 
     public void rentsItem(Item item){
