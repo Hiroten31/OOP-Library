@@ -3,6 +3,7 @@ package main;
 import classes.*;
 
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -52,27 +53,31 @@ public class Menu {
     }
 
     static void Renting(){
-        System.out.println("\n\n> Renting an item <\nItem ID: ");
-        int itemID = scanner.nextInt();
-        scanner.nextLine();
-        for(Item item : Item.getItemList()){
-            if(item.getId() == itemID){
-                if(item.getAmountAvailable()>0) {
-                    System.out.println("Member ID: ");
-                    String memberID = scanner.nextLine();
-                    for(Member member : Member.getMemberList()){
-                        if(member.getMemberID().equals(memberID)) {
-                            System.out.println("Member " + member.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
-                            item.rentItem(member);
-                            break;
+        try {
+            System.out.println("\n\n> Renting an item <\nItem ID: ");
+            int itemID = scanner.nextInt();
+            scanner.nextLine();
+            for (Item item : Item.getItemList()) {
+                if (item.getId() == itemID) {
+                    if (item.getAmountAvailable() > 0) {
+                        System.out.println("Member ID: ");
+                        String memberID = scanner.nextLine();
+                        for (Member member : Member.getMemberList()) {
+                            if (member.getMemberID().equals(memberID)) {
+                                System.out.println("Member " + member.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
+                                item.rentItem(member);
+                                break;
+                            }
                         }
+                    } else {
+                        System.out.println("You can't rent this item! There is not a single one available!");
                     }
+                    break;
                 }
-                else {
-                    System.out.println("You can't rent this item! There is not a single one available!");
-                }
-                break;
             }
+        } catch (InputMismatchException e){
+            scanner.nextLine();
+            System.out.println("You gave wrong format!");
         }
         System.out.println("\n\nClick anything to return...");
         scanner.nextLine();
@@ -80,32 +85,45 @@ public class Menu {
     }
 
     static void Returning(){
-        System.out.println("\n\n> Returning an item <\nItem ID: ");
-        int itemID = scanner.nextInt();
-        scanner.nextLine();
-        for(Item item : Item.getItemList()){
-            if(item.getId() == itemID){
-                if(item.getAmountRented()>0) {
-                    System.out.println("Member ID: ");
-                    String memberID = scanner.nextLine();
-                    for(Member member : Member.getMemberList()) {
-                        if(member.getMemberID().equals(memberID)) {
-                            if(item.getRentedByMemberID().contains(member)) {
-                                System.out.println("Member " + member.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
-                                item.returnItem(member);
+        try {
+            System.out.println("\n\n> Returning an item <\nItem ID: ");
+            int itemID = scanner.nextInt();
+            scanner.nextLine();
+            for (Item item : Item.getItemList()) {
+                if (item.getId() == itemID) {
+                    if (item.getAmountRented() > 0) {
+                        System.out.println("Member ID: ");
+                        String memberID = scanner.nextLine();
+                        for (Member member : Member.getMemberList()) {
+                            if (member.getMemberID().equals(memberID)) {
+                                if (item.getRentedByMemberID().contains(member)) {
+                                    if(member.getCost(member.getItemsRented().indexOf(item)) > 0){
+                                        System.out.printf("\nMember %s need to pay %10.2f\n1. The member have paid\n2. The member haven't paid\n", member.getFullName(), member.getCost(member.getItemsRented().indexOf(item)));
+                                        //System.out.printf("\nMember " + member.getFullName() + " need to pay %10.2f", member.getCost(member.getItemsRented().indexOf(item)) + "\n1. The member have paid\n2. The member haven't paid");
+                                        String option = notBlank();
+                                        if(option.charAt(0) == '1'){
+                                            System.out.println("Member " + member.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
+                                            item.returnItem(member);
+                                        }
+                                    } else {
+                                        System.out.println("Member " + member.getFullName() + " is returning an item " + item.getId() + ". " + item.getName());
+                                        item.returnItem(member);
+                                    }
+                                } else {
+                                    System.out.println("This member didn't rented this item! Can't return.");
+                                }
+                                break;
                             }
-                            else {
-                                System.out.println("This member didn't rented this item! Can't return.");
-                            }
-                            break;
                         }
+                    } else {
+                        System.out.println("You can't return this item! There is not a single one rented!");
                     }
+                    break;
                 }
-                else {
-                    System.out.println("You can't return this item! There is not a single one rented!");
-                }
-                break;
             }
+        } catch (InputMismatchException e){
+            scanner.nextLine();
+            System.out.println("You gave wrong format!");
         }
         System.out.println("\n\nClick anything to return...");
         scanner.nextLine();
@@ -147,19 +165,24 @@ public class Menu {
         System.out.println("\n\n> Search for items <\n1. By ID\n2. By name\n3. By member ID\n\n0. Back");
         String option = notBlank();
         if(option.charAt(0) == '1'){
-            System.out.println("\n\n> Search for item by ID <\nID: ");
-            int searchID = scanner.nextInt();
-            scanner.nextLine();
-            System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
-            for(Item item : Item.getItemList()) {
-                if (searchID == item.getId()) {
-                    System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
-                    System.out.println("Rented by:");
-                    System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                    for(int i = 0; i < item.getRentedByMemberID().size(); i++)
-                        System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(i).getFullName(), item.getRentedByMemberID().get(i).getDateOfRenting().get(item.getRentedByMemberID().get(i).getItemsRented().indexOf(item)));
-                    break;
+            try {
+                System.out.println("\n\n> Search for item by ID <\nID: ");
+                int searchID = scanner.nextInt();
+                scanner.nextLine();
+                System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
+                for (Item item : Item.getItemList()) {
+                    if (searchID == item.getId()) {
+                        System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+                        System.out.println("Rented by:");
+                        System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
+                        for (int i = 0; i < item.getRentedByMemberID().size(); i++)
+                            System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(i).getFullName(), item.getRentedByMemberID().get(i).getDateOfRenting().get(item.getRentedByMemberID().get(i).getItemsRented().indexOf(item)));
+                        break;
+                    }
                 }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
@@ -188,7 +211,7 @@ public class Menu {
             System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
             for(Member member : Member.getMemberList()) {
                 if(member.getMemberID().equals(memberID)){
-                    for(int i = 0; i< member.getItemsRented().size(); i++)
+                    for(int i = 0; i < member.getItemsRented().size(); i++)
                         System.out.printf("%5s %-150s %15s %20s %10.2f %5s\n", member.getItemsRented().get(i).getId(), member.getItemsRented().get(i).getName(), member.getDateOfRenting().get(i), member.getDateOfReturning(i), member.getCost(i), member.getItemsRented().get(i).getId());
                     break;
                 }
@@ -222,28 +245,38 @@ public class Menu {
             BrowseThroughItems();
         }
         else if(option.charAt(0) == '2') {
-            System.out.println("\n\n> Browse through items with less than amount available <\nAmount available: ");
-            int amountAvailable = scanner.nextInt();
-            System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
-            for(Item item : Item.getItemList()) {
-                if (item.getAmountAvailable()<=amountAvailable)
-                    System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+            try {
+                System.out.println("\n\n> Browse through items with less than amount available <\nAmount available: ");
+                int amountAvailable = scanner.nextInt();
+                scanner.nextLine();
+                System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
+                for (Item item : Item.getItemList()) {
+                    if (item.getAmountAvailable() <= amountAvailable)
+                        System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+                }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
-            scanner.nextLine();
             scanner.nextLine();
             BrowseThroughItems();
         }
         else if(option.charAt(0) == '3') {
-            System.out.println("\n\n> Browse through items with more than amount rented <\nAmount rented: ");
-            int amountRented = scanner.nextInt();
-            System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
-            for(Item item : Item.getItemList()) {
-                if (item.getAmountRented()>=amountRented)
-                    System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+            try {
+                System.out.println("\n\n> Browse through items with more than amount rented <\nAmount rented: ");
+                int amountRented = scanner.nextInt();
+                scanner.nextLine();
+                System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
+                for (Item item : Item.getItemList()) {
+                    if (item.getAmountRented() >= amountRented)
+                        System.out.printf("%5d %-150s %10d %6d %5d\n", item.getId(), item.getName(), item.getAmountAvailable(), item.getAmountRented(), item.getId());
+                }
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
-            scanner.nextLine();
             scanner.nextLine();
             BrowseThroughItems();
         }
@@ -361,9 +394,6 @@ public class Menu {
                 else {
                     System.out.println("You had chose option out of possible outcomes. Try again!\n");
                 }
-                System.out.println("\n\nClick anything to return...");
-                scanner.nextLine();
-                GetInfo();
             }
             else if(option.charAt(0) == '2') {
                 System.out.println("\n\n> Get detailed information about a Newspaper <\n1. By publisher\n2. Before date of release\n3. After date of release");
@@ -379,29 +409,36 @@ public class Menu {
                     }
                 }
                 else if(option.charAt(0) == '2') {
-                    LocalDate date = getValidDate();
-                    for(Item item : Item.getItemList()){
-                        if (item instanceof Newspaper) {
-                            if (((Newspaper) item).getRelease().isBefore(date))
-                                item.getInfo();
+                    try {
+                        LocalDate date = getValidDate();
+                        for (Item item : Item.getItemList()) {
+                            if (item instanceof Newspaper) {
+                                if (((Newspaper) item).getRelease().isBefore(date))
+                                    item.getInfo();
+                            }
                         }
+                    } catch (InputMismatchException e) {
+                        scanner.nextLine();
+                        System.out.println("You gave wrong of date!");
                     }
                 }
                 else if(option.charAt(0) == '3') {
-                    LocalDate date = getValidDate();
-                    for(Item item : Item.getItemList()){
-                        if (item instanceof Newspaper) {
-                            if (((Newspaper) item).getRelease().isAfter(date))
-                                item.getInfo();
+                    try {
+                        LocalDate date = getValidDate();
+                        for (Item item : Item.getItemList()) {
+                            if (item instanceof Newspaper) {
+                                if (((Newspaper) item).getRelease().isAfter(date))
+                                    item.getInfo();
+                            }
                         }
+                    } catch (InputMismatchException e) {
+                        scanner.nextLine();
+                        System.out.println("You gave wrong of date!");
                     }
                 }
                 else {
                     System.out.println("You had chose option out of possible outcomes. Try again!\n");
                 }
-                System.out.println("\n\nClick anything to return...");
-                scanner.nextLine();
-                GetInfo();
             }
             else if(option.charAt(0) == '3') {
                 System.out.println("\n\n> Get detailed information about a Publication <\n1. By author\n2. By topic");
@@ -429,9 +466,6 @@ public class Menu {
                 else {
                     System.out.println("You had chose option out of possible outcomes. Try again!\n");
                 }
-                System.out.println("\n\nClick anything to return...");
-                scanner.nextLine();
-                GetInfo();
             }
             else {
                 System.out.println("You had chose option out of possible outcomes. Try again!\n");
@@ -441,14 +475,19 @@ public class Menu {
             GetInfo();
         }
         else if (option.charAt(0) == '2'){
-            System.out.println("\n\n> Get detailed information about an item by ID <\nItem ID: ");
-            int searchID = scanner.nextInt();
-            scanner.nextLine();
-            for(Item item : Item.getItemList()) {
-                if (searchID == item.getId()) {
-                    item.getInfo();
-                    break;
+            try {
+                System.out.println("\n\n> Get detailed information about an item by ID <\nItem ID: ");
+                int searchID = scanner.nextInt();
+                scanner.nextLine();
+                for (Item item : Item.getItemList()) {
+                    if (searchID == item.getId()) {
+                        item.getInfo();
+                        break;
+                    }
                 }
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
@@ -470,236 +509,240 @@ public class Menu {
         if(option.charAt(0) == '1'){
             System.out.println("\n\n> Add an item to database <\n1. Book\n2. Newspaper\n3. Publication\n\n0. Back");
             option = notBlank();
-            if(option.charAt(0)=='1'){
-                System.out.println("\n\n> Add a Book to database <");
-                String name, author, publisher, description;
-                name = notBlank("Name: ");
-                author = notBlank("Author: ");
-                publisher = notBlank("Publisher: ");
-                description = notBlank("Description: ");
-                int amountAvailable;
-                do{
-                    System.out.println("Amount available: ");
-                    amountAvailable = scanner.nextInt();
-                } while(amountAvailable<0);
-                scanner.nextLine();
-                Book item = new Book(name, author, publisher, description, amountAvailable, 0);
-                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
-                System.out.println("\n\nClick anything to return...");
-                scanner.nextLine();
-                ManageItems();
-            }
-            else if(option.charAt(0)=='2'){
-                System.out.println("\n\n> Add a Newspaper to database <");
-                String name, publisher;
-                name = notBlank("Name: ");
-                publisher = notBlank("Publisher: ");
-                LocalDate date = getValidDate();
-                int amountAvailable;
-                do{
-                    System.out.println("Amount available: ");
-                    amountAvailable = scanner.nextInt();
-                } while(amountAvailable<0);
-                scanner.nextLine();
-                Newspaper item = new Newspaper(name, publisher, date, amountAvailable, 0);
-                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
-                System.out.println("\n\nClick anything to return...");
-                scanner.nextLine();
-                ManageItems();
-            }
-            else if(option.charAt(0)=='3'){
-                System.out.println("\n\n> Add a Publication to database <");
-                String name, topic, author;
-                name = notBlank("Name: ");
-                topic = notBlank("Topic: ");
-                int amountAvailable;
-                do{
-                    System.out.println("Amount available: ");
-                    amountAvailable = scanner.nextInt();
-                } while(amountAvailable<0);
-                scanner.nextLine();
-                Publication item = new Publication(name, topic, amountAvailable, 0);
-                int amountOfAuthors;
-                do{
-                    System.out.println("How many authors you want to add for that publication?");
-                    amountOfAuthors = scanner.nextInt();
-                } while(amountOfAuthors<0);
-                scanner.nextLine();
-                for(; amountOfAuthors>0; amountOfAuthors--) { //For loop to add right amount of authors to a Publication list.
+            try{
+                if(option.charAt(0)=='1'){
+                    System.out.println("\n\n> Add a Book to database <");
+                    String name, author, publisher, description;
+                    name = notBlank("Name: ");
                     author = notBlank("Author: ");
-                    item.getAuthors().add(author);
+                    publisher = notBlank("Publisher: ");
+                    description = notBlank("Description: ");
+                    int amountAvailable;
+                    do {
+                        System.out.println("Amount available: ");
+                        amountAvailable = scanner.nextInt();
+                    } while (amountAvailable < 0);
+                    scanner.nextLine();
+                    Book item = new Book(name, author, publisher, description, amountAvailable, 0);
+                    System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
                 }
-                System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
-                System.out.println("\n\nClick anything to return...");
+                else if(option.charAt(0)=='2'){
+                    System.out.println("\n\n> Add a Newspaper to database <");
+                    String name, publisher;
+                    name = notBlank("Name: ");
+                    publisher = notBlank("Publisher: ");
+                    LocalDate date = getValidDate();
+                    int amountAvailable;
+                    do {
+                        System.out.println("Amount available: ");
+                        amountAvailable = scanner.nextInt();
+                    } while (amountAvailable < 0);
+                    scanner.nextLine();
+                    Newspaper item = new Newspaper(name, publisher, date, amountAvailable, 0);
+                    System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
+                }
+                else if(option.charAt(0)=='3'){
+                    System.out.println("\n\n> Add a Publication to database <");
+                    String name, topic, author;
+                    name = notBlank("Name: ");
+                    topic = notBlank("Topic: ");
+                    int amountAvailable;
+                    do {
+                        System.out.println("Amount available: ");
+                        amountAvailable = scanner.nextInt();
+                    } while (amountAvailable < 0);
+                    scanner.nextLine();
+                    Publication item = new Publication(name, topic, amountAvailable, 0);
+                    int amountOfAuthors;
+                    do {
+                        System.out.println("How many authors you want to add for that publication?");
+                        amountOfAuthors = scanner.nextInt();
+                    } while (amountOfAuthors < 0);
+                    scanner.nextLine();
+                    for (; amountOfAuthors > 0; amountOfAuthors--) { //For loop to add right amount of authors to a Publication list.
+                        author = notBlank("Author: ");
+                        item.getAuthors().add(author);
+                    }
+                    System.out.println("Successfully added " + item.getId() + ". " + item.getName() + " to database!");
+                }
+            }
+            catch (InputMismatchException e){
                 scanner.nextLine();
-                ManageItems();
+                System.out.println("You gave wrong format!");
             }
-            else {
-                System.out.println("\n\n");
-                ManageItems();
-            }
+            System.out.println("\n\nClick anything to return...");
+            scanner.nextLine();
+            ManageItems();
         }
         else if(option.charAt(0) == '2'){
-            System.out.println("\n\n> Remove an item from database <\nItem ID: ");
-            int itemID = scanner.nextInt();
-            scanner.nextLine();
-            for(Item item : Item.getItemList()) {
-                if(item.getId() == itemID) {
-                    if(item.getAmountRented() == 0) {
-                        System.out.println("Are you sure you want to remove " + item.getId() + ". " + item.getName() + "?\nY / N");
-                        option = notBlank();
-                        if (option.charAt(0) == 'Y' || option.charAt(0) == 'y') {
-                            System.out.println("\nItem " + item.getId() + ". " + item.getName() + " has been successfully deleted!");
-                            Item.getItemList().remove(item); //Fixed ConcurrentModificationException by adding break, which also improves efficiency
+            try {
+                System.out.println("\n\n> Remove an item from database <\nItem ID: ");
+                int itemID = scanner.nextInt();
+                scanner.nextLine();
+                for (Item item : Item.getItemList()) {
+                    if (item.getId() == itemID) {
+                        if (item.getAmountRented() == 0) {
+                            System.out.println("Are you sure you want to remove " + item.getId() + ". " + item.getName() + "?\nY / N");
+                            option = notBlank();
+                            if (option.charAt(0) == 'Y' || option.charAt(0) == 'y') {
+                                System.out.println("\nItem " + item.getId() + ". " + item.getName() + " has been successfully deleted!");
+                                Item.getItemList().remove(item); //Fixed ConcurrentModificationException by adding break, which also improves efficiency
+                            }
+                            else if (option.charAt(0) == 'N' || option.charAt(0) == 'n') {
+                                System.out.println("\nYou declined deleting an item!");
+                            }
+                            else {
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                            }
+                        } else {
+                            System.out.println("Can't delete an item! It is still rented by: ");
+                            System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
+                            for (int j = 0; j < item.getRentedByMemberID().size(); j++)
+                                System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(j).getFullName(), item.getRentedByMemberID().get(j).getDateOfRenting().get(item.getRentedByMemberID().get(j).getItemsRented().indexOf(item)));
                         }
-                        else if (option.charAt(0) == 'N' || option.charAt(0) == 'n') {
-                            System.out.println("\nYou declined deleting an item!");
-                        }
-                        else {
-                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
-                        }
+                        break;
                     }
-                    else {
-                        System.out.println("Can't delete an item! It is still rented by: ");
-                        System.out.printf("%35s %25s\n", "FULL NAME", "DATE OF RENTING");
-                        for(int j = 0; j < item.getRentedByMemberID().size(); j++)
-                            System.out.printf("%35s %25s\n", item.getRentedByMemberID().get(j).getFullName(), item.getRentedByMemberID().get(j).getDateOfRenting().get(item.getRentedByMemberID().get(j).getItemsRented().indexOf(item)));
-                    }
-                    break;
                 }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
             ManageItems();
         }
         else if(option.charAt(0) == '3'){
-            System.out.println("\n\n> Change properties of an item <\nItem ID: ");
-            int itemID = scanner.nextInt();
-            scanner.nextLine();
-            for(Item item : Item.getItemList()) {
-                if (itemID == item.getId()) {
-                    if (item instanceof Book) {
-                        System.out.println("\n\nChange properties of an Book <\n1. Name\n2. Author\n3. Publisher\n4. Description");
-                        option = notBlank();
-                        if (option.charAt(0) == '1') {
-                            String name = notBlank("Name: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            item.setName(name);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '2') {
-                            String author = notBlank("Author: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Book) item).setAuthor(author);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '3') {
-                            String publisher = notBlank("Publisher: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Book) item).setPublisher(publisher);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '4') {
-                            String description = notBlank("Description: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Book) item).setDescription(description);
-                            getFullInfo(item);
-                        }
-                        else {
-                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
-                        }
-                    }
-                    else if (item instanceof Newspaper) {
-                        System.out.println("\n\nChange properties of an Newspaper <\n1. Name\n2. Publisher\n3. Date of Release");
-                        option = notBlank();
-                        if (option.charAt(0) == '1') {
-                            String name = notBlank("Name: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            item.setName(name);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '2') {
-                            String publisher = notBlank("Publisher: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Newspaper) item).setPublisher(publisher);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '3') {
-                            LocalDate date = getValidDate();
-                            scanner.nextLine();
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Newspaper) item).setRelease(date);
-                            getFullInfo(item);
-                        }
-                        else {
-                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
-                        }
-                    }
-                    else if (item instanceof Publication) {
-                        System.out.println("\n\nChange properties of an Publication <\n1. Name\n2. Add an author\n3. Remove an author\n4. Topic");
-                        option = notBlank();
-                        if (option.charAt(0) == '1') {
-                            String name = notBlank("Name: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            item.setName(name);
-                            getFullInfo(item);
-                        }
-                        else if (option.charAt(0) == '2') {
-                            String author = notBlank("Author: ");
-                            if (((Publication) item).getAuthors().contains(author)) {
-                                System.out.println("This publication already have " + author + " as one of it authors!");
-                            }
-                            else {
+            try {
+                System.out.println("\n\n> Change properties of an item <\nItem ID: ");
+                int itemID = scanner.nextInt();
+                scanner.nextLine();
+                for (Item item : Item.getItemList()) {
+                    if (itemID == item.getId()) {
+                        if (item instanceof Book) {
+                            System.out.println("\n\n> Change properties of an Book <\n1. Name\n2. Author\n3. Publisher\n4. Description");
+                            option = notBlank();
+                            if (option.charAt(0) == '1') {
+                                String name = notBlank("Name: ");
                                 System.out.println("You have successfully change: ");
                                 getFullInfo(item);
                                 System.out.println("To: ");
-                                ((Publication) item).getAuthors().add(author);
+                                item.setName(name);
                                 getFullInfo(item);
                             }
-                        }
-                        else if (option.charAt(0) == '3') {
-                            String author = notBlank("Author: ");
-                            if (((Publication) item).getAuthors().contains(author)) {
+                            else if (option.charAt(0) == '2') {
+                                String author = notBlank("Author: ");
                                 System.out.println("You have successfully change: ");
                                 getFullInfo(item);
                                 System.out.println("To: ");
-                                ((Publication) item).getAuthors().remove(author);
+                                ((Book) item).setAuthor(author);
+                                getFullInfo(item);
+                            }
+                            else if (option.charAt(0) == '3') {
+                                String publisher = notBlank("Publisher: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Book) item).setPublisher(publisher);
+                                getFullInfo(item);
+                            }
+                            else if (option.charAt(0) == '4') {
+                                String description = notBlank("Description: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Book) item).setDescription(description);
                                 getFullInfo(item);
                             }
                             else {
-                                System.out.println("This publication don't have " + author + " as one of it authors!");
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
                             }
                         }
-                        else if (option.charAt(0) == '4') {
-                            String topic = notBlank("Topic: ");
-                            System.out.println("You have successfully change: ");
-                            getFullInfo(item);
-                            System.out.println("To: ");
-                            ((Publication) item).setTopic(topic);
-                            getFullInfo(item);
+                        else if (item instanceof Newspaper) {
+                            System.out.println("\n\n> Change properties of an Newspaper <\n1. Name\n2. Publisher\n3. Date of Release");
+                            option = notBlank();
+                            if (option.charAt(0) == '1') {
+                                String name = notBlank("Name: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                item.setName(name);
+                                getFullInfo(item);
+                            }
+                            else if (option.charAt(0) == '2') {
+                                String publisher = notBlank("Publisher: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Newspaper) item).setPublisher(publisher);
+                                getFullInfo(item);
+                            }
+                            else if (option.charAt(0) == '3') {
+                                LocalDate date = getValidDate();
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Newspaper) item).setRelease(date);
+                                getFullInfo(item);
+                            }
+                            else {
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                            }
                         }
-                        else {
-                            System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                        else if (item instanceof Publication) {
+                            System.out.println("\n\n> Change properties of an Publication <\n1. Name\n2. Add an author\n3. Remove an author\n4. Topic");
+                            option = notBlank();
+                            if (option.charAt(0) == '1') {
+                                String name = notBlank("Name: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                item.setName(name);
+                                getFullInfo(item);
+                            }
+                            else if (option.charAt(0) == '2') {
+                                String author = notBlank("Author: ");
+                                if (((Publication) item).getAuthors().contains(author)) {
+                                    System.out.println("This publication already have " + author + " as one of it authors!");
+                                }
+                                else {
+                                    System.out.println("You have successfully change: ");
+                                    getFullInfo(item);
+                                    System.out.println("To: ");
+                                    ((Publication) item).getAuthors().add(author);
+                                    getFullInfo(item);
+                                }
+                            }
+                            else if (option.charAt(0) == '3') {
+                                String author = notBlank("Author: ");
+                                if (((Publication) item).getAuthors().contains(author)) {
+                                    System.out.println("You have successfully change: ");
+                                    getFullInfo(item);
+                                    System.out.println("To: ");
+                                    ((Publication) item).getAuthors().remove(author);
+                                    getFullInfo(item);
+                                }
+                                else {
+                                    System.out.println("This publication don't have " + author + " as one of it authors!");
+                                }
+                            }
+                            else if (option.charAt(0) == '4') {
+                                String topic = notBlank("Topic: ");
+                                System.out.println("You have successfully change: ");
+                                getFullInfo(item);
+                                System.out.println("To: ");
+                                ((Publication) item).setTopic(topic);
+                                getFullInfo(item);
+                            }
+                            else {
+                                System.out.println("\nYou had chose option out of possible outcomes. Try again!\n");
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("You gave wrong format!");
             }
             System.out.println("\n\nClick anything to return...");
             scanner.nextLine();
@@ -742,7 +785,7 @@ public class Menu {
             String memberID = scanner.nextLine();
             for(Member member : Member.getMemberList()) {
                 if (member.getMemberID().equals(memberID)) {
-                    System.out.println("\n\n> Change properties of an member <\n1. Name\n2. Surname\n3. Member ID");
+                    System.out.println("\n\n> Change properties of an member <\n1. Name\n2. Surname\n3. Phone number");
                     option = notBlank();
                     if(option.charAt(0) == '1'){
                         String name = notBlank("Name: ");
@@ -761,29 +804,33 @@ public class Menu {
                         System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
                     }
                     else if(option.charAt(0) == '3'){
-                        long phoneNumber;
-                        do {
-                            System.out.println("Phone number: ");
-                            phoneNumber = scanner.nextLong();
-                            System.out.println(Long.toString(phoneNumber).length());
-                        } while(Long.toString(phoneNumber).length()!=9);
-                        scanner.nextLine();
-                        boolean check = true;
-                        for(Member phoneCheck : Member.getMemberList()){ //This weird loop is necessary to check if phone number won't duplicate in database.
-                            if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
-                                check = false;
-                                break;
+                        try {
+                            long phoneNumber;
+                            do {
+                                System.out.println("Phone number: ");
+                                phoneNumber = scanner.nextLong();
+                                System.out.println(Long.toString(phoneNumber).length());
+                            } while (Long.toString(phoneNumber).length() != 9);
+                            scanner.nextLine();
+                            boolean check = true;
+                            for (Member phoneCheck : Member.getMemberList()) { //This weird loop is necessary to check if phone number won't duplicate in database.
+                                if (phoneCheck.getPhoneNumber().equals((int) phoneNumber)) {
+                                    check = false;
+                                    break;
+                                }
                             }
-                        }
-                        if(check) {
-                            System.out.println("You have successfully change: ");
-                            System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
-                            System.out.println("To: ");
-                            member.setPhoneNumber((int) phoneNumber);
-                            System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
-                        }
-                        else {
-                            System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
+                            if (check) {
+                                System.out.println("You have successfully change: ");
+                                System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
+                                System.out.println("To: ");
+                                member.setPhoneNumber((int) phoneNumber);
+                                System.out.println(member.getMemberID() + ". " + member.getFullName() + ", phone number: " + member.getPhoneNumber());
+                            } else {
+                                System.out.println("You can't set phone number to " + phoneNumber + ", because it's already used!");
+                            }
+                        } catch (InputMismatchException e) {
+                            scanner.nextLine();
+                            System.out.println("You gave wrong format!");
                         }
                     }
                     else {
@@ -799,41 +846,50 @@ public class Menu {
         else if(option.charAt(0) == '6'){
             System.out.println("\n\n> Change general settings <\n1. How many months are free while renting (now " + Member.getMonthsForFree() + ")\n2. Cost per day of delay (now " + Member.getCostPerDayOfDelay() + ")\n\n0. Back");
             option = notBlank();
-            if(option.charAt(0)=='1'){
-                System.out.println("\n\nHow many months are free while renting?");
-                int months;
-                do{
-                    System.out.println("Months: ");
-                    months = scanner.nextInt();
-                } while(months<0);
-                scanner.nextLine();
-                System.out.println("Changed amount of months free from charging after renting from: ");
-                System.out.println(Member.getMonthsForFree());
-                System.out.println("To: ");
-                Member.setMonthsForFree(months);
-                System.out.println(Member.getMonthsForFree());
+            if (option.charAt(0) == '1') {
+                try {
+                    System.out.println("\n\nHow many months are free while renting?");
+                    int months;
+                    do {
+                        System.out.println("Months: ");
+                        months = scanner.nextInt();
+                    } while (months < 0);
+                    scanner.nextLine();
+                    System.out.println("Changed amount of months free from charging after renting from: ");
+                    System.out.println(Member.getMonthsForFree());
+                    System.out.println("To: ");
+                    Member.setMonthsForFree(months);
+                    System.out.println(Member.getMonthsForFree());
+                } catch (InputMismatchException e) {
+                    scanner.nextLine();
+                    System.out.println("You gave wrong format!");
+                }
                 System.out.println("\n\nClick anything to return...");
                 scanner.nextLine();
                 ManageItems();
             }
-            else if(option.charAt(0)=='2'){
-                System.out.println("\n\nCost per day of delay");
-                double cost;
-                do {
-                    System.out.println("Cost: ");
-                    cost = scanner.nextDouble();
-                } while(cost<0);
-                scanner.nextLine();
-                System.out.println("Changed cost per every day of delay from: ");
-                System.out.println(Member.getCostPerDayOfDelay());
-                System.out.println("To: ");
-                Member.setCostPerDayOfDelay(cost);
-                System.out.println(Member.getCostPerDayOfDelay());
+            else if (option.charAt(0) == '2') {
+                try {
+                    System.out.println("\n\nCost per day of delay");
+                    double cost;
+                    do {
+                        System.out.println("Cost: ");
+                        cost = Double.parseDouble(scanner.nextLine()); //Using Double.parseDouble to accept input of double in format of "XX.XX" instead "XX,XX"
+                    } while (cost < 0);
+                    System.out.println("Changed cost per every day of delay from: ");
+                    System.out.println(Member.getCostPerDayOfDelay());
+                    System.out.println("To: ");
+                    Member.setCostPerDayOfDelay(cost);
+                    System.out.println(Member.getCostPerDayOfDelay());
+                } catch (NumberFormatException | InputMismatchException e) {
+                    scanner.nextLine();
+                    System.out.println("You gave wrong format!");
+                }
                 System.out.println("\n\nClick anything to return...");
                 scanner.nextLine();
                 ManageItems();
             }
-            else if(option.charAt(0)=='0'){
+            else if (option.charAt(0) == '0') {
                 System.out.println("\n\n");
                 ManageItems();
             }
