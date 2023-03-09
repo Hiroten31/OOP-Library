@@ -25,3 +25,29 @@ Items are rented by phone number, because who doesn't have their OWN phone numbe
 - **You won't crash the program by entering wrong values!**  
 [Try to enter character instead of integer when asked]  
 By using try...catch and do...while program will forgive you all mistakes! *I hope...*  
+- **You can safely manage items as much as you can**
+[Try to remove or add as many items as you want]
+System will automatically distribute IDs in a way they won't duplicate ever!
+- **Also it's relatively efficent**
+[Here a little bit of code with for loop]
+Unfortunately there are for loops in for loops, but they are breaked as soon as possible!
+
+## How does it work?
+Let's start with a files.
+### package: classes
+- file: Item.java
+- file: Book.java
+- file: Newspaper.java
+- file: Publication.java
+### package: data
+- file: Items.ser, Members.ser
+- file: Settings.txt
+### package: main
+- file: Main.java
+- file: Menu.java  
+the biggest boi  
+  
+Logic behind it.  
+
+## What I've learned from it?
+A LOT.
