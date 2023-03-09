@@ -3,7 +3,6 @@ package classes;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,7 +107,7 @@ public class Member implements Serializable {
 
     public void rentsItem(Item item){
         ItemsRented.add(item);
-        dateOfRenting.add(LocalDate.of(2022, Month.OCTOBER, ((phoneNumber%10)*item.getId())%28));
+        dateOfRenting.add(LocalDate.now());
     }
 
     public void returnsItem(Item item){

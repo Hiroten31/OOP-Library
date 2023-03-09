@@ -55,9 +55,7 @@ public class Main {
             System.out.println("There is no file to load Settings from.\nCheck if had you provide correct direction.\nIgnore if it is the first time running the program!");
         }
 
-
         Menu.Start();
-
 
         ////Saving
         //Items
@@ -95,6 +93,5 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println("\n\n");
-        //TODO: fix dates of renting and returning, make reasonable items and members for testing, fix error after entering wrong input in nextInt() and nextDouble();
     }
 }
