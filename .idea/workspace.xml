@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Done charging user for delayed returning. 3 months free, then 0.57 for every day. TODO saving all objects and basic operations on them like add/removing them.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/data/Settings.txt" afterDir="false" />
+    <list default="true" id="50fb51d9-1a1b-4f08-b5f7-b93539021998" name="Changes" comment="Done reasonable data to test implemented functions.">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.ser" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/classes/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/classes/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.ser" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +56,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
   }
 }</component>
   <component name="RunManager">
@@ -165,7 +165,84 @@
       <option name="project" value="LOCAL" />
       <updated>1677154218153</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Quickly fixed saving and loading of settings which are static variables.">
+      <created>1677863946952</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1677863946952</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Reorganized class to be more readable.">
+      <created>1677944081433</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1677944081433</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Reorganized class to be more readable.">
+      <created>1677944162157</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1677944162157</updated>
+    </task>
+    <task id="LOCAL-00015" summary="New methods to shorten code, cleaned up some ifs, added break; for better efficiency in FOR loops which are searching a unique value in a List.">
+      <created>1677947568547</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1677947568547</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Reorganized class to be more readable.">
+      <created>1677965852743</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1677965852743</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Reorganized class to be more readable.">
+      <created>1677965900055</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1677965900055</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Added Settings file to save amount of free months and cost per day of delay.">
+      <created>1677966133761</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1677966133761</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Renamed all 'user' to 'member' for better clarity.">
+      <created>1678118800265</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1678118800265</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Covered exceptions, fixed recursions, fixed costs.">
+      <created>1678226170411</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1678226170411</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Corrected returning value of getCost to 0 if date is not in the past yet.">
+      <created>1678226261115</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1678226261115</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Done reasonable data to test implemented functions.">
+      <created>1678226302764</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1678226302764</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -190,7 +267,15 @@
     <MESSAGE value="Done searching by memberID with correct display of personal renting date of specific item." />
     <MESSAGE value="Improved Menu.java options, WIP charging with late returning of book." />
     <MESSAGE value="Done charging user for delayed returning. 3 months free, then 0.57 for every day. TODO saving all objects and basic operations on them like add/removing them." />
-    <option name="LAST_COMMIT_MESSAGE" value="Done charging user for delayed returning. 3 months free, then 0.57 for every day. TODO saving all objects and basic operations on them like add/removing them." />
+    <MESSAGE value="Quickly fixed saving and loading of settings which are static variables." />
+    <MESSAGE value="New methods to shorten code, cleaned up some ifs, added break; for better efficiency in FOR loops which are searching a unique value in a List." />
+    <MESSAGE value="Reorganized class to be more readable." />
+    <MESSAGE value="Added Settings file to save amount of free months and cost per day of delay." />
+    <MESSAGE value="Renamed all 'user' to 'member' for better clarity." />
+    <MESSAGE value="Covered exceptions, fixed recursions, fixed costs." />
+    <MESSAGE value="Corrected returning value of getCost to 0 if date is not in the past yet." />
+    <MESSAGE value="Done reasonable data to test implemented functions." />
+    <option name="LAST_COMMIT_MESSAGE" value="Done reasonable data to test implemented functions." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
