@@ -44,7 +44,12 @@ Unfortunately there are for loops in for loops, but they are breaked as soon as 
 
 
 ## 🤔 How does it work?
-Let's start with the files.
+Let's start with the files.  
+| package | files | 
+| --- | --- |
+| [`classes`](#package-classes) | Item.java<br/>Book.java<br/>Newspaper.java<br/>Publication.java |
+| [`data`](#package-data) | Items.ser<br/>Members.ser<br/>Settings.txt |
+| [`main`](#package-main) | Main.java<br/>Menu.java |  
 ### package: classes
 - file: Item.java  
 
@@ -109,7 +114,7 @@ Of course each of them have their own getters and setters methods needed for cor
    
    
    
-The method getInfo() in every class is simple printer of their unique parameters (example of Book class):
+The method getInfo() in every class is a simple printer of their unique parameters (example of Book class):
 ```java
 @Override
 public void getInfo(){
@@ -124,6 +129,44 @@ public void getInfo(){
   
 - file: Member.java  
 
+It is a class that contain all parameters of a member. It has 3 array lists:  
+<table>
+  <tr>
+    <td><b>ItemsRented</b></td>
+    <td>List of items rented by member. Methods <i>rentsItem(Item item)</i> and <i>returnsItem(Item item)</i> are controlling the content of the list.</td>
+  </tr>
+  <tr>
+    <td><b>dateOfRenting</b></td>
+    <td>Store dates in the same order as items in ItemsRented.</td>
+  </tr>
+  <tr>
+    <td><b>members</b></td>
+    <td>List of all members, <i>static</i> because it is the same for everyone.</td>
+  </tr>
+</table>
+Today I would just use a HashMap to fuse the first two lists, because it would for sure be more clear, easier to control and safer :brain:  
+<br/><br/><br/>
+  There are also the other two static variables which are:  
+<table>
+  <tr>
+    <td><b>monthsForFree</b></td>
+    <td>how many months are supposed to be cost-free.</td>
+  </tr>
+  <tr>
+    <td><b>costPerDayOfDelay</b></td>
+    <td>how much system is charging for every single day of being late with returning an item.</td>
+  </tr>
+</table>
+Those two static variables are in member, because of the dateOfRenting list which is necessary to count the cost. I think it would be pointless to declare them anywhere else.  
+<br/><br/>
+Also you could ask: <br/>
+<blockquote> Why there is a String <i>memberID</i> AND an Integer <i>phoneNumber</i> if there have the same value as said before? </blockquote>
+
+WELL, I thought about setting memberID for people without phone number as: first letter of name + first letter of surname + date of registering.  
+<br/> BUT, then I would be need to add some ifs to check if they are not duplicated and came to conclusion that everybody has their own number today, so this is just leftovers, which I didn't get rid of because maybe one day I'll build it further, who knows?
+  
+<hr>  
+  
 ### package: data  
 - file: Items.ser, Members.ser
 - file: Settings.txt
