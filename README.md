@@ -65,7 +65,7 @@ Item() {
   Items.add(this);
 }
 ```
-Which is called every time an object (that implements Item class) is created. It is keeping track of ID distribution in database.  
+Which is called every time an object (that extends Item class) is created. It is keeping track of ID distribution in database.  
   
 To being able to rent and return item we use those two methods:
 ```java
@@ -168,13 +168,16 @@ WELL, I thought about setting memberID for people without phone number as: first
 <hr>  
   
 ### package: data  
-- file: Items.ser, Members.ser
-- file: Settings.txt
+- file: Items.ser, Members.ser  
+  Those are files that are coded by compiler. They are holding all vulnerable data (especially in case of Members.ser). They are loaded and saved in Main.java. You can also easily change the path of where to save those files in Main.java as the path is saved as variable. 
+- file: Settings.txt  
+  A text file with just two values, first of free months, second of cost per day of delay. It's saved as .txt file as those aren't any personal data and there is no need to crypt it.
 
 ### package: main  
-- file: Main.java
+- file: Main.java  
+  Main file that contais main() function used to run the program. It also loads and saves data, as it is one of the basic function that this programs need to do and they shouldn't be change in any way. Between loading and saving is short Menu.Start() which lead us to the function in last file, the most developed one file. 
 - file: Menu.java  
-the biggest boi  
+File that mostly works with loops, printing messages and if statements. It has a lot of lines and I could split it into few files and create a whole new package out of it for better clarity, but I think that is pointless at this point. The file is done and it would probably take me hald a day to split it correctly. 
   
 Logic behind it.  
 
