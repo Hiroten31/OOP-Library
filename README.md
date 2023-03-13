@@ -169,17 +169,57 @@ WELL, I thought about setting memberID for people without phone number as: first
   
 ### package: data  
 - file: Items.ser, Members.ser  
-  Those are files that are coded by compiler. They are holding all vulnerable data (especially in case of Members.ser). They are loaded and saved in Main.java. You can also easily change the path of where to save those files in Main.java as the path is saved as variable. 
+
+Those are files that are coded by compiler. They are holding all vulnerable data (especially in case of Members.ser). They are loaded and saved in Main.java. You can also easily change the path of where to save those files in Main.java as the path is saved as variable. 
+```java
+File ItemsFile = new File("src/main/java/data/Items.ser");
+File MembersFile = new File("src/main/java/data/Members.ser");
+File SettingsFile = new File("src/main/java/data/Settings.txt");
+```
 - file: Settings.txt  
-  A text file with just two values, first of free months, second of cost per day of delay. It's saved as .txt file as those aren't any personal data and there is no need to crypt it.
+
+A text file with just two values, first of free months, second of cost per day of delay. It's saved as .txt file as those aren't any personal data and there is no need to crypt it. It is required to be as those two values are static variables, so they can't be serializabled
 
 ### package: main  
 - file: Main.java  
-  Main file that contais main() function used to run the program. It also loads and saves data, as it is one of the basic function that this programs need to do and they shouldn't be change in any way. Between loading and saving is short Menu.Start() which lead us to the function in last file, the most developed one file. 
-- file: Menu.java  
-File that mostly works with loops, printing messages and if statements. It has a lot of lines and I could split it into few files and create a whole new package out of it for better clarity, but I think that is pointless at this point. The file is done and it would probably take me hald a day to split it correctly. 
-  
-Logic behind it.  
 
+Main file with main() function to start the program. Additionally it contains a loading and saving system as it's basic function that need to be run before everything else. Example of Items.ser file loading:
+```java
+if(ItemsFile.exists()){
+  try {
+    FileInputStream readData = new FileInputStream(ItemsFile);
+    ObjectInputStream readStream = new ObjectInputStream(readData);
+    Item.setItems((ArrayList<Item>) readStream.readObject());
+    readStream.close();
+    System.out.println("Items loaded.");
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+} else {
+  System.out.println("There is no file to load Items data from.\nCheck if had you provide correct direction.\nIgnore if it is the first time running the program!\n\n");
+}
+```  
+And example of the same file saving:
+```java
+try {
+  FileOutputStream writeData = new FileOutputStream(ItemsFile);
+  ObjectOutputStream writeStream = new ObjectOutputStream(writeData);
+  writeStream.writeObject(Item.getItemList());
+  writeStream.flush();
+  writeStream.close();
+  System.out.println("Items saved.");
+} catch (IOException e) {
+  e.printStackTrace();
+}
+```  
+Between them is run one function, Menu.Start() that smoothly lead us to the biggest code file in this project.
+- file: Menu.java  
+
+File that mostly works with loops, printing messages and if statements.  
+
+  Logic behind it.  
+  
+Of course I could split it into few files in separated package, but not only it would take me a while to do it, files would have a lot of imports and could result in worse clarity overall.
+  
 ## ✍️ What I've learned from it?
 A LOT.
