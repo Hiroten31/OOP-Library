@@ -61,7 +61,7 @@ public class Menu {
                 if (item.getId() == itemID) {
                     if (item.getAmountAvailable() > 0) {
                         System.out.println("Member ID: ");
-                        String memberID = scanner.nextLine();
+                        String memberID = notBlank();
                         for (Member member : Member.getMemberList()) {
                             if (member.getMemberID().equals(memberID)) {
                                 System.out.println("Member " + member.getFullName() + " is renting an item " + item.getId() + ". " + item.getName());
@@ -93,7 +93,7 @@ public class Menu {
                 if (item.getId() == itemID) {
                     if (item.getAmountRented() > 0) {
                         System.out.println("Member ID: ");
-                        String memberID = scanner.nextLine();
+                        String memberID = notBlank();
                         for (Member member : Member.getMemberList()) {
                             if (member.getMemberID().equals(memberID)) {
                                 if (item.getRentedByMemberID().contains(member)) {
@@ -190,7 +190,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '2'){
             System.out.println("\n\n> Search for items by name <\nName: ");
-            String searchName = scanner.nextLine();
+            String searchName = notBlank();
             System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
             for(Item item : Item.getItemList()) {
                 if(searchName.equals(item.getName())) {
@@ -207,7 +207,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '3'){
             System.out.println("\n\n> Search for items by member ID <\nMember ID: ");
-            String memberID = scanner.nextLine();
+            String memberID = notBlank();
             System.out.printf("%5s %-150s %15s %20s %10s %5s\n", "ID", "NAME", "DATE OF RENTING", "DATE OF RETURNING", "COST", "ID");
             for(Member member : Member.getMemberList()) {
                 if(member.getMemberID().equals(memberID)){
@@ -234,7 +234,7 @@ public class Menu {
         String option = notBlank();
         if(option.charAt(0) == '1') {
             System.out.println("\n\n> Browse through items by type <\nType: (types: Book, Publication, Newspaper)");
-            String type = scanner.nextLine();
+            String type = notBlank();
             System.out.printf("%5s %-150s %10s %5s %5s\n", "ID", "NAME", "AVAILABLE", "RENTED", "ID");
             for(Item item : Item.getItemList()) {
                 if (item.getClass().getSimpleName().equals(type))
@@ -303,7 +303,7 @@ public class Menu {
         String option = notBlank();
         if(option.charAt(0) == '1'){
             System.out.println("\n\n> Search for member by ID <\nMember ID: ");
-            String memberID = scanner.nextLine();
+            String memberID = notBlank();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
             for(Member member : Member.getMemberList()) {
                 if(member.getMemberID().equals(memberID)) {
@@ -332,7 +332,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '3'){
             System.out.println("\n\n> Search for member by phone number <\nPhone number: ");
-            String phoneNumber = scanner.nextLine();
+            String phoneNumber = notBlank();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
             for(Member member : Member.getMemberList()) {
                 if(member.getPhoneNumber().toString().equals(phoneNumber)){
@@ -373,7 +373,7 @@ public class Menu {
                 option = notBlank();
                 if(option.charAt(0) == '1'){
                     System.out.println("Author: ");
-                    String author = scanner.nextLine();
+                    String author = notBlank();
                     for(Item item : Item.getItemList()){
                         if (item instanceof Book) {
                             if (((Book) item).getAuthor().equals(author))
@@ -383,7 +383,7 @@ public class Menu {
                 }
                 else if(option.charAt(0) == '2'){
                     System.out.println("Publisher: ");
-                    String publisher = scanner.nextLine();
+                    String publisher = notBlank();
                     for(Item item : Item.getItemList()){
                         if (item instanceof Book) {
                             if (((Book) item).getPublisher().equals(publisher))
@@ -400,7 +400,7 @@ public class Menu {
                 option = notBlank();
                 if(option.charAt(0) == '1'){
                     System.out.println("Publisher: ");
-                    String publisher = scanner.nextLine();
+                    String publisher = notBlank();
                     for(Item item : Item.getItemList()){
                         if (item instanceof Newspaper) {
                             if (((Newspaper) item).getPublisher().equals(publisher))
@@ -445,7 +445,7 @@ public class Menu {
                 option = notBlank();
                 if(option.charAt(0) == '1'){
                     System.out.println("Author: ");
-                    String author = scanner.nextLine();
+                    String author = notBlank();
                     for(Item item : Item.getItemList()){
                         if (item instanceof Publication) {
                             if (((Publication) item).getAuthors().contains(author))
@@ -455,7 +455,7 @@ public class Menu {
                 }
                 else if(option.charAt(0) == '2'){
                     System.out.println("Topic: ");
-                    String topic = scanner.nextLine();
+                    String topic = notBlank();
                     for(Item item : Item.getItemList()){
                         if (item instanceof Publication) {
                             if (((Publication) item).getTopic().contains(topic))
@@ -750,7 +750,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '4'){
             System.out.println("\n\n>  Remove an member <\nMember ID: ");
-            String memberID = scanner.nextLine();
+            String memberID = notBlank();
             for(Member member : Member.getMemberList()) {
                 if(member.getMemberID().equals(memberID)) {
                     if(member.getItemsRented().size() == 0) {
@@ -782,7 +782,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '5'){
             System.out.println("\n\n> Change properties of an Member <\nMember ID: ");
-            String memberID = scanner.nextLine();
+            String memberID = notBlank();
             for(Member member : Member.getMemberList()) {
                 if (member.getMemberID().equals(memberID)) {
                     System.out.println("\n\n> Change properties of an member <\n1. Name\n2. Surname\n3. Phone number");
@@ -874,7 +874,7 @@ public class Menu {
                     double cost;
                     do {
                         System.out.println("Cost: ");
-                        cost = Double.parseDouble(scanner.nextLine()); //Using Double.parseDouble to accept input of double in format of "XX.XX" instead "XX,XX"
+                        cost = Double.parseDouble(notBlank()); //Using Double.parseDouble to accept input of double in format of "XX.XX" instead "XX,XX"
                     } while (cost < 0);
                     System.out.println("Changed cost per every day of delay from: ");
                     System.out.println(Member.getCostPerDayOfDelay());
