@@ -318,7 +318,7 @@ public class Menu {
         }
         else if(option.charAt(0) == '2'){
             System.out.println("\n\n> Search for member by full name <\nFull name: ");
-            String fullName = scanner.nextLine();
+            String fullName = notBlank();
             System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
             for(Member member : Member.getMemberList()) {
                 if(member.getFullName().equals(fullName)) {
