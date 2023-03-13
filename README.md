@@ -213,9 +213,64 @@ try {
 }
 ```  
 Between them is run one function, Menu.Start() that smoothly lead us to the biggest code file in this project.
+<hr>  
+
 - file: Menu.java  
 
 File that mostly works with loops, printing messages and if statements.  
+Methods are orginazed in the levels of how deep into those methods we are going. So we begin with method Start() which is the first level called from main() method.
+```java
+static void Start(){
+  System.out.println("\n\n> Library system <\n1. Database\n2. Renting\n3. Returning\n4. Register new member\n\n0. Exit");
+  String option = notBlank();
+  if(option.charAt(0) == '1')
+    Database();
+  else if(option.charAt(0) == '2')
+    Renting();
+  else if(option.charAt(0) == '3')
+    Returning();
+  else if(option.charAt(0) == '4')
+    Register();
+  else if(option.charAt(0) == '0'){}
+  else {
+    System.out.println("You had chose option out of possible outcomes. Try again!\n\n");
+    Start();
+  }
+}
+```
+Usually every method is build like this:
+1. Message informing of what options you have
+2. Scanner to get user's input
+3. ifs to check the input
+4. Closing methods and messages like "Click anything to return..."
+
+From Start() we can go to Database() which has very similar build to the first method. All of their options are just to move one level deeper.
+The whole file is pretty much all over and over the same stuff and searching through earlier created lists of objects:
+```java
+System.out.println("\n\n> Search for member by full name <\nFull name: ");
+String fullName = notBlank();
+System.out.printf("%10s %-35s %25s %10s\n", "ID", "FULL NAME", "DATE OF JOINING", "PHONE NUMBER");
+for(Member member : Member.getMemberList()) {
+  if(member.getFullName().equals(fullName)) {
+    System.out.printf("%10s %-35s %25s %10d\n", member.getMemberID(), member.getFullName(), member.getJoinDate(), member.getPhoneNumber());
+    printItemsRented(member);
+  }
+}
+```
+As you can see it is method that is searching for member by his full name. We get input by method called 'notBlank()' used to secure entering empty String:
+```java
+private static String notBlank(){
+  String string;
+  do {
+    string = scanner.nextLine();
+  } while(string.isBlank());
+  return string;
+}
+```
+Next we are printing a nice table of all the information about members who have `fullName` matching.
+<img src="https://user-images.githubusercontent.com/97809912/224850140-d88ef46f-937f-4abc-9e8a-3fcc5fda67ed.png" width="100%">
+In this case we can't use `break` for better efficency of the loop as there can be more than one member having the same full name as the other. I used `break` only in the loops which search for unique values as IDs.  
+
 
   Logic behind it.  
   
