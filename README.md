@@ -39,12 +39,14 @@ By using try...catch and do...while program will forgive all of yours mistakes! 
 System will automatically distribute IDs in a way they won't duplicate ever!  
 
 ## 🤔 How does it work?
-Let's start with the files.  
+Let's discuss it by the files.  
 | package | files | 
 | --- | --- |
 | [`classes`](#package-classes) | Item.java<br/>Book.java<br/>Newspaper.java<br/>Publication.java |
 | [`data`](#package-data) | Items.ser<br/>Members.ser<br/>Settings.txt |
 | [`main`](#package-main) | Main.java<br/>Menu.java |  
+<hr>
+
 ### package: classes
 - file: Item.java  
 
@@ -171,9 +173,12 @@ File ItemsFile = new File("src/main/java/data/Items.ser");
 File MembersFile = new File("src/main/java/data/Members.ser");
 File SettingsFile = new File("src/main/java/data/Settings.txt");
 ```
+<hr>
+
 - file: Settings.txt  
 
 A text file with just two values, first of free months, second of cost per day of delay. It is saved as .txt file as those aren't any personal data and there is no need to crypt it. It is required to be as those two values are static variables, so they cannnot be serialized like before.
+<hr>
 
 ### package: main  
 - file: Main.java  
@@ -259,7 +264,7 @@ static void Start(){
 Usually every method is build like this:
 1. Message informing of what options you have
 2. Scanner to get user's input
-3. ifs to check the input
+3. `if`s to check the input, further options, searching and printing correct data
 4. Closing methods and messages like "Click anything to return..."
 
 From `Start()` we can go to `Database()` which has very similar build to the first method. All of their options are just to move one level deeper.
@@ -341,8 +346,9 @@ private static LocalDate getValidDate(){
 </details>  
   
 And this is pretty much all that is occuring in this file.  
-Of course I could split it into few files in separated package, but not only it would take me a while to do it, files would have a lot of imports and could result in worse clarity overall.
-  
+Of course I could split it into few files in separated package, but not only it would take me a while to do it, files would have a lot of imports and could result in worse clarity overall.  
+<hr>
+
 ## ✍️ What I've learned from it?
 I have for sure trained objected oriented programming. I almost used every aspect that I have learned before like:
   - abstract classes and interfaces
