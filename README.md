@@ -354,6 +354,7 @@ I have for sure trained objected oriented programming. I almost used every aspec
   - working with objects
   - foreach loop
   - serialization of data
-  - using static and final keywords.
-It is completely original, I haven't followed any tutorial, so overall I can say it turned out pretty well.  
-It WORKS which is most important, it is somewhat clear, I have used stuff that I wanted to use.   
+  - using static and final keywords.  
+  
+It is **completely original**, I haven't followed any tutorial, so overall I can say it turned out pretty well.  
+It WORKS which is most important, it is somewhat clear and I have used stuff that I wanted to use.   
