@@ -19,7 +19,7 @@ It's a fully working system to manage typical items in typical library. It has a
 The system is fully secure! :lock:  
 - **You won't be able to remove an user who still have rented books.**  
 [Try to remove Dwight - ID: `311141027`]  
-The member need to return all of it items to being able to be removed.  
+The member need to return all of his rented items to being able to be removed.  
 
 - **You won't be able to remove an item which is still rented.**  
 [Try to remove Part bosses' - ID: `5`]  
@@ -214,12 +214,14 @@ Between them is run one function, `Menu.Start()` that smoothly lead us to the bi
 
 File that mostly works with loops, printing messages and if statements.  
 Methods are orginazed in the levels of how deep into those methods we are going. 
-Whole structure of the closed methods looks like this:
+<details>
+  <summary><b>Whole structure of the closed methods looks like this:</b></summary>
+  
 ```java
 //Method accessed from main() - 1 level
 static void Start(){...}
 
-//Method accessed from Start() - 2 level
+//Methods accessed from Start() - 2 level
 static void Database(){...}
 static void Renting(){...}
 static void Returning(){...}
@@ -232,7 +234,8 @@ static void SearchForMember(){...}
 static void GetInfo(){...}
 static void ManageItems(){...}
 ```
-
+</details>  
+  
 So we begin with method `Start()` which is the first level called from `main()` method.
 ```java
 static void Start(){
@@ -336,7 +339,21 @@ private static LocalDate getValidDate(){
 }
 ```
 </details>  
+  
+And this is pretty much all that is occuring in this file.  
 Of course I could split it into few files in separated package, but not only it would take me a while to do it, files would have a lot of imports and could result in worse clarity overall.
   
 ## ✍️ What I've learned from it?
-A LOT.
+I have for sure trained objected oriented programming. I almost used every aspect that I have learned before like:
+  - abstract classes and interfaces
+  - polymorphism
+  - overloading methods
+  - try{...}catch 
+  - array lists
+  - creating new instances of class
+  - working with objects
+  - foreach loop
+  - serialization of data
+  - using static and final keywords.
+It is completely original, I haven't followed any tutorial, so overall I can say it turned out pretty well.  
+It WORKS which is most important, it is somewhat clear, I have used stuff that I wanted to use.   
